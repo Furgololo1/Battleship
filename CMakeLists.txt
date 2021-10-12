@@ -30,6 +30,8 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 if(ANDROID)
   add_library(Battleship SHARED
     main.cpp
+    button.cpp
+    button.h
     base.cpp
     base.h
     base.ui
@@ -39,6 +41,10 @@ else()
     main.cpp
     base.cpp
     base.h
+    button.cpp
+    button.h
+    ship.cpp
+    ship.h
     base.ui
   )
 endif()
