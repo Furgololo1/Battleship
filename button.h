@@ -6,15 +6,15 @@
 class button : public QPushButton
 {
 
-    QString name = "basic";
+    int number = 0;
 
 
 public:
     button();
     ~button(){};
 
-    void SetName(QString n){name = n;}
-    QString GetName(){return name;}
+    void SetName(int n){number = n;}
+    int GetName(){return number;}
 
 private:
 

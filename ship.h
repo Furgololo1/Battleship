@@ -2,7 +2,7 @@
 #define SHIP_H
 
 #include <QString>
-
+#include <algorithm>
 #include <vector>
 
 
@@ -22,18 +22,18 @@ public:
     ship(int size, QString name): shipsize(size), shipname(name){};
     ~ship(){};
 
-    bool IsButtonAShip(QString n);
+    bool IsButtonAShip(int n);
 
-    void AddButtonToShip(QString blocks){  shipblocks.push_back(blocks);  }
+    void AddButtonToShip(int blocks){  shipblocks.push_back(blocks); std::sort(std::begin(shipblocks), std::end(shipblocks)); }
 
-    QString GetShipName(){return shipname;}
+  //  int GetShipName(){return shipname;}
 
-    std::vector<QString> *GetShipBlocks(){return &shipblocks;}
+    std::vector<int> *GetShipBlocks(){return &shipblocks;}
 
 private:
 
     //ship blocks
-    std::vector<QString> shipblocks;
+    std::vector<int> shipblocks;
 
 
 };

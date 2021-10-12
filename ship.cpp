@@ -6,10 +6,10 @@ ship::ship()
        shipsize = 0;
 }
 
-bool ship::IsButtonAShip(QString n)
+bool ship::IsButtonAShip(int n)
 {
-    if(shipname == n)
-        return true;
+    //if(shipname == n)
+        //return true;
 
    return false;
 
