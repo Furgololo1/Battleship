@@ -65,7 +65,7 @@ void Base::CreateConnection(button *b)
 {
 
  b->connect(b, &button::clicked, this, [b, this]()mutable{
-      //(*ships)[ships->size()]->AddButtonToShip(b->GetName());
+      //(*ships)[ships->size()]->TryAddButtonToShip(b->GetName());
       AssignButtonToShip(b);
       b->setStyleSheet(shipsbutton);
       b->disconnect();
@@ -76,31 +76,53 @@ void Base::CreateConnection(button *b)
 
 void Base::AssignButtonToShip(button *b)
 {
-
+    //section 1
     if(ships->size() == 0){
         ships->push_back(new ship());
-        (*ships)[0]->AddButtonToShip(b->GetName());
+        (*ships)[0]->TryAddButtonToShip(b->GetName());
     }
 
-
+    //section 1
     else{
         int size = ships->size();
+
+     //if adding to ship button *b is succesful  (first "if" statement is true) then "isgood" is true
+     //if
         bool isgood = false;
 
+
+        //for loops for checking addition validation
+        //section 2
         for(int i = 0; i < size; i++){
             for(const auto s : *(*ships)[i]->GetShipBlocks()){
 
+             //section 3
                 if(s - 10 == b->GetName() || s + 10 == b->GetName() || s + 1 == b->GetName() || s - 1 == b->GetName()){
-                    (*ships)[i]->AddButtonToShip(b->GetName());
-                    isgood = true;
-                }
 
+
+                 //section 4
+                    if((*ships)[i]->TryAddButtonToShip(b->GetName())){}
+
+
+                 //section 4
+                    else{
+                        qDebug()<<"Cannot add "<<b->GetName();
+                    }
+
+                  // isgood = true;
+                   //break;
+                    return;
+                }
             }
         }
-        if(isgood == false){
-             ships->push_back(new ship());
-             (*ships)[ships->size()-1]->AddButtonToShip(b->GetName());
-        }
+
+
+        //section 2
+      //  if(isgood == false){
+           ships->push_back(new ship());
+           (*ships)[ships->size()-1]->TryAddButtonToShip(b->GetName());
+           qDebug()<<"Not breaking loops";
+        //}
     }
 
 

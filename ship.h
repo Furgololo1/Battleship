@@ -12,6 +12,8 @@ class ship
     //ship size
     int shipsize = 0;
 
+    int n = 0;
+
     QString shipname = "basic";
 
     //counts ships in fleet of one player
@@ -24,7 +26,9 @@ public:
 
     bool IsButtonAShip(int n);
 
-    void AddButtonToShip(int blocks){  shipblocks.push_back(blocks); std::sort(std::begin(shipblocks), std::end(shipblocks)); }
+    bool TryAddButtonToShip(int blocks);
+
+    bool AdditionValidation(int s);
 
   //  int GetShipName(){return shipname;}
 
