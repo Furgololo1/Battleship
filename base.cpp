@@ -7,11 +7,13 @@ Base::Base(QWidget *parent)
 {
     ui->setupUi(this);
 
-    this->resize(400,265);
+    this->resize(655,300);
 
     ships = new std::vector<ship *>();
 
     CreateButtons();
+    CreateEnemyButtons();
+    CreateUI();
 }
 
 Base::~Base()
@@ -20,12 +22,58 @@ Base::~Base()
     delete ui;
 }
 
-void Base::CreateButtons()
-{
+
+void Base::CreateUI(){
+
+//    labels = new std::vector<QLabel*>();
+
+//    labels->push_back(new QLabel("Twoja flota", this));
+//    (*labels)[0]->setFont(QFont("Arial Black", 15, 1, false));
+//    (*labels)[0]->move(50, 20);
+
+}
+
+
+void Base::CreateEnemyButtons(){
+
+    x = 400;
+    y = 45;
+
+    enemybuttons.push_back(std::vector<button *>());
+
+    int number = 1;
+    char letter = 'A';
+
+    for(int i = 0; i < 10; i++){
+        enemybuttons.push_back(std::vector<button *>());
+
+        for(int j = 0; j < 10; j++){
+            enemybuttons[i].push_back(new button());
+            enemybuttons[i][j]->setParent(this);
+            enemybuttons[i][j]->resize(buttonsize, buttonsize);
+            enemybuttons[i][j]->move(x,y);
+            enemybuttons[i][j]->setStyleSheet(normalbutton);
+            enemybuttons[i][j]->SetName((QChar)letter, QString::number(number));
+            enemybuttons[i][j]->setText(QString::number(number));
+           // CreateConnection(enemybuttons[i][j]);
+
+            x+=25;
+            letter++;
+        }
+        letter = 'A';
+        number++;
+        x = 400;
+        y += 25;
+    }
+}
+
+
+void Base::CreateButtons(){
 
     buttons.push_back(std::vector<button *>());
 
     int number = 1;
+    char letter = 'A';
 
     for(int i = 0; i < 10; i++){
         buttons.push_back(std::vector<button *>());
@@ -36,13 +84,15 @@ void Base::CreateButtons()
             buttons[i][j]->resize(buttonsize, buttonsize);
             buttons[i][j]->move(x,y);
             buttons[i][j]->setStyleSheet(normalbutton);
-            buttons[i][j]->SetName(number);
-            buttons[i][j]->setText(QString::number(number));
+            buttons[i][j]->SetName((QChar)letter, QString::number(number));
+            buttons[i][j]->setText(letter + QString::number(number));
             CreateConnection(buttons[i][j]);
             
             x+=25;
-            number++;
+            letter++;
         }
+        letter = 'A';
+        number++;
         x = 10;
         y += 25;
     }
@@ -55,8 +105,10 @@ void Base::CreateButtons()
 
 void Base::on_pushButton_clicked()
 {
-  //  ships->push_back(new ship(4, "Ship 4"));
+//    ships->push_back(new ship(4, "Ship 4"));
 
+//    QString a = "Aa";
+//    qDebug()<<(int)a[1].toLatin1();
 }
 
 
@@ -65,15 +117,13 @@ void Base::CreateConnection(button *b)
 {
 
  b->connect(b, &button::clicked, this, [b, this]()mutable{
-      //(*ships)[ships->size()]->TryAddButtonToShip(b->GetName());
-      AssignButtonToShip(b);
-      b->setStyleSheet(shipsbutton);
-      b->disconnect();
+//      AssignButtonToShip(b);
+      A(b);
  });
 
 
 }
-
+/*
 void Base::AssignButtonToShip(button *b)
 {
     //section 1
@@ -86,45 +136,85 @@ void Base::AssignButtonToShip(button *b)
     else{
         int size = ships->size();
 
-     //if adding to ship button *b is succesful  (first "if" statement is true) then "isgood" is true
-     //if
-        bool isgood = false;
+     //first bool - when true meets the conditions for adding, second bool - can be add
+        QPair<bool,bool> state (false, false);
 
 
-        //for loops for checking addition validation
         //section 2
         for(int i = 0; i < size; i++){
-            for(const auto s : *(*ships)[i]->GetShipBlocks()){
 
-             //section 3
-                if(s - 10 == b->GetName() || s + 10 == b->GetName() || s + 1 == b->GetName() || s - 1 == b->GetName()){
+                state = (*ships)[i]->TryAddButtonToShip(b->GetName());
 
+                      if(state.first == true && state.second == true){
+                            b->setStyleSheet(shipsbutton);
+                            b->disconnect();
+                            return;
+                      }
 
-                 //section 4
-                    if((*ships)[i]->TryAddButtonToShip(b->GetName())){}
+                      else if(state.first == true && state.second == false){
+                          qDebug()<<"Cannot add button: "<<b->GetName() << " to ship"<<i;
+                          return;
+                      }
 
-
-                 //section 4
-                    else{
-                        qDebug()<<"Cannot add "<<b->GetName();
-                    }
-
-                  // isgood = true;
-                   //break;
-                    return;
-                }
             }
+
+            if(state.first == false && state.second == false){
+                   ships->push_back(new ship());
+                   (*ships)[ships->size()-1]->TryAddButtonToShip(b->GetName());
+            }
+
         }
 
 
-        //section 2
-      //  if(isgood == false){
-           ships->push_back(new ship());
-           (*ships)[ships->size()-1]->TryAddButtonToShip(b->GetName());
-           qDebug()<<"Not breaking loops";
-        //}
+
+
+    b->setStyleSheet(shipsbutton);
+    b->disconnect();
+
+}
+*/
+
+void Base::A(button *b){
+    if(ships->size() == 0){
+        ships->push_back(new ship());
+        (*ships)[0]->TryAddButtonToShip(b);
     }
 
+    else{
+
+        int size = ships->size();
+
+     //first bool - when true meets the conditions for adding, second bool - can be add
+        QPair<bool,bool> state (false, false);
+
+
+        //section 2
+        for(int i = 0; i < size; i++){
+            state = (*ships)[i]->TryAddButtonToShip(b);
+
+
+            if(state.first == true && state.second == true){
+                  b->setStyleSheet(shipsbutton);
+                  b->disconnect();
+                  return;
+            }
+
+            else if(state.first == true && state.second == false){
+                qDebug()<<"Cannot add button: "<<b->GetName() << " to ship"<<i;
+                return;
+            }
+
+        }
+
+        if(state.first == false && state.second == false){
+               ships->push_back(new ship());
+               (*ships)[ships->size()-1]->TryAddButtonToShip(b);
+        }
+
+    }
+
+    b->setStyleSheet(shipsbutton);
+    b->disconnect();
 
 }
 
@@ -141,8 +231,8 @@ void Base::on_pushButton_2_clicked()
     for(int i = 0; i < size; i++){
         qDebug()<<"Ship nr " << i ;
 
-              for(const auto &s : *(*ships)[i]->GetShipBlocks()){
-                    qDebug()<<"Ship :"<<s ;
+              for(const auto &s : *(*ships)[i]->GetShipvec()){
+                    qDebug()<<"Ship :"<<s->GetName() ;
               }
 
         qDebug()<<"";
@@ -150,3 +240,27 @@ void Base::on_pushButton_2_clicked()
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

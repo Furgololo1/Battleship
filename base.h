@@ -4,7 +4,10 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QDebug>
+#include <QPair>
+#include <QLabel>
 #include <vector>
+
 
 
 #include "button.h"
@@ -24,6 +27,8 @@ public:
 
 
     void CreateButtons();
+    void CreateEnemyButtons();
+
 public slots:
 
 
@@ -35,7 +40,6 @@ public slots:
 private slots:
     void on_pushButton_clicked();
 
-
     void on_pushButton_2_clicked();
 
 private:
@@ -44,10 +48,10 @@ private:
     //size of
     int shipsize = 0;
 
-    int x = 10, y = 10;
+    int x = 10, y = 45;
     int buttonsize = 20;
 
-    QString normalbutton = "QPushButton{background-color: #BFCDE0;   border: none;   color: white;   padding: 15px 32px;    text-align: center;   text-decoration: none;    }";
+    QString normalbutton = "QPushButton{background-color: #CB4335;   border: none;   color: white;   padding: 15px 32px;    text-align: center;   text-decoration: none;    }";
 
     QString shipsbutton = "QPushButton{background-color: #056DE3;   border: none;   color: white;   padding: 15px 32px;    text-align: center;   text-decoration: none;    }";
 
@@ -60,6 +64,10 @@ private:
     //vector of all buttons in game
     std::vector<std::vector<button *> > buttons;
 
+    std::vector<std::vector<button *> > enemybuttons;
+
+    std::vector<QLabel *> *labels = nullptr;
+
 
 
 
@@ -68,6 +76,10 @@ private:
     void CreateConnection(button *b);
 
     void AssignButtonToShip(button *b);
+
+    void A(button *b);
+
+    void CreateUI();
 
 
 
