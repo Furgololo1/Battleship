@@ -15,7 +15,7 @@ bool ship::IsButtonAShip(int n)
 
 }
 
-
+/*
 //33, 34, 35    40
 QPair<bool, bool> ship::TryAddButtonToShip(int blocks){
 
@@ -53,7 +53,7 @@ QPair<bool, bool> ship::TryAddButtonToShip(int blocks){
 
 
     return QPair<bool,bool>(false,false);
-}
+}*/
 
 
 bool ship::AdditionValidation(button *b){

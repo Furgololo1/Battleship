@@ -183,6 +183,7 @@ void Base::A(button *b){
     else{
 
         int size = ships->size();
+        bool isadded = false;
 
      //first bool - when true meets the conditions for adding, second bool - can be add
         QPair<bool,bool> state (false, false);
@@ -193,11 +194,15 @@ void Base::A(button *b){
             state = (*ships)[i]->TryAddButtonToShip(b);
 
 
-            if(state.first == true && state.second == true){
+            if(state.first == true && state.second == true && isadded == false){
                   b->setStyleSheet(shipsbutton);
                   b->disconnect();
-                  return;
+                  isadded = true;
+                  //return;
             }
+
+            else if(state.first == true && state.second == true && isadded == true)
+                b->setStyleSheet(normalbutton);
 
             else if(state.first == true && state.second == false){
                 qDebug()<<"Cannot add button: "<<b->GetName() << " to ship"<<i;

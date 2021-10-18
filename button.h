@@ -9,7 +9,7 @@ class button : public QPushButton
     QString name = "";
     QString row = "1";
     QChar col = 'A';
-
+    bool isadded = false;
 
 
 public:
@@ -24,6 +24,8 @@ public:
     QString GetName(){return name;}
     QChar GetCol(){return col;}
     QString GetRow(){return row;}
+    bool IsAdded(){return isadded;}
+    void Add(bool state){ isaddes = state;}
 
 private:
 
