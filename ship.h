@@ -7,6 +7,7 @@
 #include <QPair>
 #include <algorithm>
 #include <vector>
+#include <iostream>
 
 #include "button.h"
 
@@ -38,6 +39,8 @@ public:
 
     bool IsButtonAShip(int n);
 
+    QString GetLayout(){if(layout == Layout::Horizontal) return "Horizontal";  return "Vertical";}
+
     QPair<bool, bool> TryAddButtonToShip(int blocks);
     QPair<bool, bool> TryAddButtonToShip(button *b);
 
@@ -53,6 +56,10 @@ private:
     //ship blocks
     std::vector<int> shipblocks;
     std::vector<button *> shipvec;
+
+
+    void sortRow();
+    void sortCol();
 
 
 };

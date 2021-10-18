@@ -229,7 +229,7 @@ void Base::on_pushButton_2_clicked()
     qDebug()<<"Vector of ships size : "<<size;
 
     for(int i = 0; i < size; i++){
-        qDebug()<<"Ship nr " << i ;
+        qDebug()<<"Ship nr " << i <<"  layout: "<<(*ships)[i]->GetLayout();
 
               for(const auto &s : *(*ships)[i]->GetShipvec()){
                     qDebug()<<"Ship :"<<s->GetName() ;

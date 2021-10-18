@@ -93,34 +93,67 @@ QPair<bool, bool> ship::TryAddButtonToShip(button *b){
 
                 }
 
-               else{//zaimplementowac algorytm z góry
-
-                        if((b->GetCol() == s->GetCol()) && (b->GetRow().toInt() == shipvec[0]->GetRow().toInt() || b->GetRow().toInt() - 1 == shipvec[0]->GetRow().toInt())){
-                            if((shipvec[0]->GetRow().toInt() + shipvec.size() == b->GetRow().toInt()) || (shipvec[0]->GetRow().toInt() - 1 == b->GetRow().toInt())){
+               else{
+                        if((b->GetCol() == s->GetCol()) && (b->GetRow().toInt() + 1 == s->GetRow().toInt() || b->GetRow().toInt() - 1 == s->GetRow().toInt())){
+                            if(layout == Layout::Horizontal)   return QPair<bool,bool>(true,false);
+                            else if(layout == Layout::Vertical){
                                 shipvec.push_back(b);
-                                std::sort(std::begin(shipblocks), std::end(shipblocks));
-                                layout = Layout::Vertical;
+                                sortRow();
                                 return QPair<bool,bool>(true,true);
                             }
-                            else return QPair<bool, bool>(true, false);
                         }
 
+
+
                         else if((b->GetRow().toInt() == s->GetRow().toInt()) && ((int)b->GetCol().toLatin1() + 1 == (int)s->GetCol().toLatin1() || (int)b->GetCol().toLatin1() - 1 == (int)s->GetCol().toLatin1())){
-                            //if(b->GetCol().){
+                             if(layout == Layout::Vertical) return QPair<bool,bool>(true,false);
+                             else if(layout == Layout::Horizontal){
                                 shipvec.push_back(b);
-                                std::sort(std::begin(shipblocks), std::end(shipblocks));
-                                layout = Layout::Horizontal;
+                                sortCol();
                                 return QPair<bool,bool>(true,true);
-                            //}
+                             }
                         }
 
 
                }
-
             }
     }
 
     return QPair<bool,bool>(false,false);
 
+
+}
+
+
+
+void ship::sortRow(){
+
+    int size = shipvec.size();
+
+    do{
+        for(int i = 1; i < size; i++){
+            if(shipvec[i]->GetRow().toInt() < shipvec[i-1]->GetRow().toInt())
+                std::swap(shipvec[i], shipvec[i-1]);
+        }
+
+        size--;
+    }while(size > 1);
+
+}
+
+
+
+void ship::sortCol(){
+
+    int size = shipvec.size();
+
+    do{
+        for(int i = 1; i < size; i++){
+            if(shipvec[i]->GetCol() < shipvec[i-1]->GetCol())
+                std::swap(shipvec[i], shipvec[i-1]);
+        }
+
+        size--;
+    }while(size > 1);
 
 }
