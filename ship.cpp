@@ -95,18 +95,23 @@ QPair<bool, bool> ship::TryAddButtonToShip(button *b){
 
                else{//zaimplementowac algorytm z góry
 
-                        if((b->GetCol() == s->GetCol()) && (b->GetRow().toInt() == shipvec[0] || b->GetRow().toInt() - 1 == )){
-                            shipvec.push_back(b);
-                            std::sort(std::begin(shipblocks), std::end(shipblocks));
-                            layout = Layout::Vertical;
-                            return QPair<bool,bool>(true,true);
+                        if((b->GetCol() == s->GetCol()) && (b->GetRow().toInt() == shipvec[0]->GetRow().toInt() || b->GetRow().toInt() - 1 == shipvec[0]->GetRow().toInt())){
+                            if((shipvec[0]->GetRow().toInt() + shipvec.size() == b->GetRow().toInt()) || (shipvec[0]->GetRow().toInt() - 1 == b->GetRow().toInt())){
+                                shipvec.push_back(b);
+                                std::sort(std::begin(shipblocks), std::end(shipblocks));
+                                layout = Layout::Vertical;
+                                return QPair<bool,bool>(true,true);
+                            }
+                            else return QPair<bool, bool>(true, false);
                         }
 
                         else if((b->GetRow().toInt() == s->GetRow().toInt()) && ((int)b->GetCol().toLatin1() + 1 == (int)s->GetCol().toLatin1() || (int)b->GetCol().toLatin1() - 1 == (int)s->GetCol().toLatin1())){
-                            shipvec.push_back(b);
-                            std::sort(std::begin(shipblocks), std::end(shipblocks));
-                            layout = Layout::Horizontal;
-                            return QPair<bool,bool>(true,true);
+                            //if(b->GetCol().){
+                                shipvec.push_back(b);
+                                std::sort(std::begin(shipblocks), std::end(shipblocks));
+                                layout = Layout::Horizontal;
+                                return QPair<bool,bool>(true,true);
+                            //}
                         }
 
 

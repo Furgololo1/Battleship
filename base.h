@@ -51,7 +51,7 @@ private:
     int x = 10, y = 45;
     int buttonsize = 20;
 
-    QString normalbutton = "QPushButton{background-color: #CB4335;   border: none;   color: white;   padding: 15px 32px;    text-align: center;   text-decoration: none;    }";
+    QString normalbutton = "QPushButton{background-color: #FFFFFF;   border: none;   color: #000000;   padding: 15px 32px;    text-align: center;   text-decoration: none;    }";
 
     QString shipsbutton = "QPushButton{background-color: #056DE3;   border: none;   color: white;   padding: 15px 32px;    text-align: center;   text-decoration: none;    }";
 
