@@ -53,8 +53,8 @@ void Base::CreateEnemyButtons(){
             enemybuttons[i][j]->resize(buttonsize, buttonsize);
             enemybuttons[i][j]->move(x,y);
             enemybuttons[i][j]->setStyleSheet(normalbutton);
-            enemybuttons[i][j]->SetName((QChar)letter, QString::number(number));
-            enemybuttons[i][j]->setText(QString::number(number));
+            enemybuttons[i][j]->SetName((QChar)letter, number);
+            enemybuttons[i][j]->setText(letter + QString::number(number));
            // CreateConnection(enemybuttons[i][j]);
 
             x+=25;
@@ -84,7 +84,7 @@ void Base::CreateButtons(){
             buttons[i][j]->resize(buttonsize, buttonsize);
             buttons[i][j]->move(x,y);
             buttons[i][j]->setStyleSheet(normalbutton);
-            buttons[i][j]->SetName((QChar)letter, QString::number(number));
+            buttons[i][j]->SetName((QChar)letter, number);
             buttons[i][j]->setText(letter + QString::number(number));
             CreateConnection(buttons[i][j]);
             
@@ -184,6 +184,7 @@ void Base::A(button *b){
 
         int size = ships->size();
         bool isadded = false;
+        int toremove = 0;
 
      //first bool - when true meets the conditions for adding, second bool - can be add
         QPair<bool,bool> state (false, false);
@@ -194,18 +195,19 @@ void Base::A(button *b){
             state = (*ships)[i]->TryAddButtonToShip(b);
 
 
-            if(state.first == true && state.second == true && isadded == false){
+            if(state.first == true && state.second == true ){
                   b->setStyleSheet(shipsbutton);
                   b->disconnect();
                   isadded = true;
-                  //return;
+                  toremove = i;
+                 // return;
             }
 
-            else if(state.first == true && state.second == true && isadded == true)
-                b->setStyleSheet(normalbutton);
 
-            else if(state.first == true && state.second == false){
+            else if(state.first == true && state.second == false && isadded == true){
                 qDebug()<<"Cannot add button: "<<b->GetName() << " to ship"<<i;
+                b->setStyleSheet(normalbutton);
+                (*ships)[toremove]->RemoveLastAddedButton();
                 return;
             }
 

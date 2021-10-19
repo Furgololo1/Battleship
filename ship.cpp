@@ -77,14 +77,14 @@ QPair<bool, bool> ship::TryAddButtonToShip(button *b){
 
                 if(shipvec.size() < 2){
 
-                        if((b->GetRow().toInt() + 1 == s->GetRow().toInt() || b->GetRow().toInt() - 1 == s->GetRow().toInt()) && b->GetCol() == s->GetCol()){
+                        if((b->GetRow() + 1 == s->GetRow() || b->GetRow() - 1 == s->GetRow()) && b->GetCol() == s->GetCol()){
                             shipvec.push_back(b);
                             std::sort(std::begin(shipblocks), std::end(shipblocks));
                             layout = Layout::Vertical;
                             return QPair<bool,bool>(true,true);
                         }
 
-                        else if(((int)b->GetCol().toLatin1() + 1 == (int)s->GetCol().toLatin1() || (int)b->GetCol().toLatin1() - 1 == (int)s->GetCol().toLatin1()) && (b->GetRow().toInt() == s->GetRow().toInt())){
+                        else if((b->GetCol() + 1 == s->GetCol() || b->GetCol() - 1 == s->GetCol()) && (b->GetRow() == s->GetRow())){
                             shipvec.push_back(b);
                             std::sort(std::begin(shipblocks), std::end(shipblocks));
                             layout = Layout::Horizontal;
@@ -94,7 +94,7 @@ QPair<bool, bool> ship::TryAddButtonToShip(button *b){
                 }
 
                else{
-                        if((b->GetCol() == s->GetCol()) && (b->GetRow().toInt() + 1 == s->GetRow().toInt() || b->GetRow().toInt() - 1 == s->GetRow().toInt())){
+                        if((b->GetCol() == s->GetCol()) && (b->GetRow() + 1 == s->GetRow() || b->GetRow() - 1 == s->GetRow())){
                             if(layout == Layout::Horizontal)   return QPair<bool,bool>(true,false);
                             else if(layout == Layout::Vertical){
                                 shipvec.push_back(b);
@@ -105,7 +105,7 @@ QPair<bool, bool> ship::TryAddButtonToShip(button *b){
 
 
 
-                        else if((b->GetRow().toInt() == s->GetRow().toInt()) && ((int)b->GetCol().toLatin1() + 1 == (int)s->GetCol().toLatin1() || (int)b->GetCol().toLatin1() - 1 == (int)s->GetCol().toLatin1())){
+                        else if((b->GetRow() == s->GetRow()) && (b->GetCol() + 1 == s->GetCol() || b->GetCol() - 1 == s->GetCol())){
                              if(layout == Layout::Vertical) return QPair<bool,bool>(true,false);
                              else if(layout == Layout::Horizontal){
                                 shipvec.push_back(b);
@@ -132,7 +132,7 @@ void ship::sortRow(){
 
     do{
         for(int i = 1; i < size; i++){
-            if(shipvec[i]->GetRow().toInt() < shipvec[i-1]->GetRow().toInt())
+            if(shipvec[i]->GetRow() < shipvec[i-1]->GetRow())
                 std::swap(shipvec[i], shipvec[i-1]);
         }
 

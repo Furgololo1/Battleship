@@ -7,8 +7,9 @@ class button : public QPushButton
 {
 
     QString name = "";
-    QString row = "1";
+    QString roww = "1";
     QChar col = 'A';
+    int row = 0;
     bool isadded = false;
 
 
@@ -18,14 +19,20 @@ public:
 
     void SetName(QChar c, QString r){
         name = c + r;
+        roww = r;
+        col = c;
+    }
+    void SetName(QChar c, int r){
+        name = c + QString::number(r);
         row = r;
         col = c;
     }
+
     QString GetName(){return name;}
-    QChar GetCol(){return col;}
-    QString GetRow(){return row;}
+    int GetCol(){return (int)col.toLatin1();}
+    int GetRow(){return row;}
     bool IsAdded(){return isadded;}
-    void Add(bool state){ isaddes = state;}
+    void Add(bool state){ isadded = state;}
 
 private:
 

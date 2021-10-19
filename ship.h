@@ -28,6 +28,8 @@ class ship
 
     Layout layout;
 
+    button *lastadded = nullptr;
+
 
     //counts ships in fleet of one player
   //  static int shipsinfleet = 0;
@@ -50,6 +52,13 @@ public:
 
     std::vector<int> *GetShipBlocks(){return &shipblocks;}
     std::vector<button *> *GetShipvec(){return &shipvec;}
+
+    void RemoveLastAddedButton(){
+        for(int i = 0; i < shipvec.size(); i++)
+            if(shipvec[i] == lastadded)
+                shipvec.erase(shipvec.begin() + i-1);
+
+    };
 
 private:
 
