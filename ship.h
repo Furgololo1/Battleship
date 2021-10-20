@@ -39,6 +39,8 @@ public:
 
     std::vector<button *> *GetShipvec(){return &shipvec;}
 
+    static int shipscount[4];
+
 private:
 
     //ship components

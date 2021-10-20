@@ -107,14 +107,13 @@ void Base::CreateConnection(button *b)
 
  b->connect(b, &button::clicked, this, [b, this]()mutable{
       AssignButtonToShip(b);
-//      A(b);
  });
 
 
 }
 
 
-void Base::A(button *b){
+void Base::AssignButtonToShip(button *b){
     if(ships->size() == 0){
         ships->push_back(new ship(buttons));
         (*ships)[0]->TryAddButtonToShip(b);
@@ -173,6 +172,27 @@ void Base::on_pushButton_2_clicked()
         qDebug()<<"";
 
     }
+
+}
+
+
+
+void Base::CheckShipsCorrectness(){
+    const int ship4 = 1;
+    const int ship3 = 2;
+    const int ship2 = 3;
+    const int ship1 = 4;
+
+    int size = ships->size();
+
+    int count = 0;
+
+    for(int i = 0; i < size; i++){
+        if((*ships)[i]->GetShipsize()){
+
+        }
+    }
+
 
 }
 

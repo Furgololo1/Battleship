@@ -1,5 +1,8 @@
 #include "ship.h"
 
+
+int ship::shipscount[4]{0,0,0,0};
+
 ship::ship()
 {
        //shipname = "basic";
@@ -14,7 +17,7 @@ bool ship::IsButtonAShip(int n)
 }
 
 
-bool ship::AdditionValidation(button *b){
+bool ship::AdditionValidation(button *b){  
 
     delete buttons;
 
