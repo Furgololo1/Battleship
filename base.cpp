@@ -102,119 +102,47 @@ void Base::CreateButtons(){
 
 
 
-
-void Base::on_pushButton_clicked()
-{
-//    ships->push_back(new ship(4, "Ship 4"));
-
-//    QString a = "Aa";
-//    qDebug()<<(int)a[1].toLatin1();
-}
-
-
-
 void Base::CreateConnection(button *b)
 {
 
  b->connect(b, &button::clicked, this, [b, this]()mutable{
-//      AssignButtonToShip(b);
-      A(b);
+      AssignButtonToShip(b);
+//      A(b);
  });
 
 
 }
-/*
-void Base::AssignButtonToShip(button *b)
-{
-    //section 1
-    if(ships->size() == 0){
-        ships->push_back(new ship());
-        (*ships)[0]->TryAddButtonToShip(b->GetName());
-    }
 
-    //section 1
-    else{
-        int size = ships->size();
-
-     //first bool - when true meets the conditions for adding, second bool - can be add
-        QPair<bool,bool> state (false, false);
-
-
-        //section 2
-        for(int i = 0; i < size; i++){
-
-                state = (*ships)[i]->TryAddButtonToShip(b->GetName());
-
-                      if(state.first == true && state.second == true){
-                            b->setStyleSheet(shipsbutton);
-                            b->disconnect();
-                            return;
-                      }
-
-                      else if(state.first == true && state.second == false){
-                          qDebug()<<"Cannot add button: "<<b->GetName() << " to ship"<<i;
-                          return;
-                      }
-
-            }
-
-            if(state.first == false && state.second == false){
-                   ships->push_back(new ship());
-                   (*ships)[ships->size()-1]->TryAddButtonToShip(b->GetName());
-            }
-
-        }
-
-
-
-
-    b->setStyleSheet(shipsbutton);
-    b->disconnect();
-
-}
-*/
 
 void Base::A(button *b){
     if(ships->size() == 0){
-        ships->push_back(new ship());
+        ships->push_back(new ship(buttons));
         (*ships)[0]->TryAddButtonToShip(b);
     }
 
     else{
 
         int size = ships->size();
-        bool isadded = false;
-        int toremove = 0;
 
      //first bool - when true meets the conditions for adding, second bool - can be add
-        QPair<bool,bool> state (false, false);
+        bool state = false;
 
 
         //section 2
         for(int i = 0; i < size; i++){
+
             state = (*ships)[i]->TryAddButtonToShip(b);
 
-
-            if(state.first == true && state.second == true ){
+            if(state){
                   b->setStyleSheet(shipsbutton);
                   b->disconnect();
-                  isadded = true;
-                  toremove = i;
                  // return;
-            }
-
-
-            else if(state.first == true && state.second == false && isadded == true){
-                qDebug()<<"Cannot add button: "<<b->GetName() << " to ship"<<i;
-                b->setStyleSheet(normalbutton);
-                (*ships)[toremove]->RemoveLastAddedButton();
-                return;
             }
 
         }
 
-        if(state.first == false && state.second == false){
-               ships->push_back(new ship());
+        if(!state){
+               ships->push_back(new ship(buttons));
                (*ships)[ships->size()-1]->TryAddButtonToShip(b);
         }
 
@@ -236,7 +164,7 @@ void Base::on_pushButton_2_clicked()
     qDebug()<<"Vector of ships size : "<<size;
 
     for(int i = 0; i < size; i++){
-        qDebug()<<"Ship nr " << i <<"  layout: "<<(*ships)[i]->GetLayout();
+        qDebug()<<"Ship nr " << i;
 
               for(const auto &s : *(*ships)[i]->GetShipvec()){
                     qDebug()<<"Ship :"<<s->GetName() ;

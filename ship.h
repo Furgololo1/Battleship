@@ -5,6 +5,7 @@
 
 #include <QString>
 #include <QPair>
+#include <QDebug>
 #include <algorithm>
 #include <vector>
 #include <iostream>
@@ -15,60 +16,42 @@
 class ship
 {
 
-    enum Layout{
-        Horizontal,
-        Vertical
-    };
-
-
     //ship size
     int shipsize = 0;
 
-    QString shipname = "basic";
-
-    Layout layout;
-
-    button *lastadded = nullptr;
-
-
     //counts ships in fleet of one player
-  //  static int shipsinfleet = 0;
+      int shipsinfleet = 0;
 
 public:
     ship();
-    ship(int size, QString name): shipsize(size), shipname(name){};
-    ~ship(){};
+    ship(std::vector<std::vector<button *> > &tempbuttons): buttons(&tempbuttons){};
+    //ship(int size, QString name,  std::vector<std::vector<button *> > &tempbuttons): shipsize(size), shipname(name), buttons(&tempbuttons){};
+    ~ship(){delete buttons; shipvec.clear();}
 
     bool IsButtonAShip(int n);
 
-    QString GetLayout(){if(layout == Layout::Horizontal) return "Horizontal";  return "Vertical";}
 
-    QPair<bool, bool> TryAddButtonToShip(int blocks);
-    QPair<bool, bool> TryAddButtonToShip(button *b);
+    bool TryAddButtonToShip(button *b);
 
     bool AdditionValidation(button *b);
 
-  //  int GetShipName(){return shipname;}
+    int GetShipsize(){return shipsinfleet;}
 
-    std::vector<int> *GetShipBlocks(){return &shipblocks;}
     std::vector<button *> *GetShipvec(){return &shipvec;}
-
-    void RemoveLastAddedButton(){
-        for(int i = 0; i < shipvec.size(); i++)
-            if(shipvec[i] == lastadded)
-                shipvec.erase(shipvec.begin() + i-1);
-
-    };
 
 private:
 
-    //ship blocks
-    std::vector<int> shipblocks;
+    //ship components
     std::vector<button *> shipvec;
+
+    //temporary buttons for disconnecting
+    std::vector<std::vector<button *> > *buttons = nullptr;
 
 
     void sortRow();
     void sortCol();
+
+    void DisconnectButton(button *b);
 
 
 };

@@ -2,125 +2,112 @@
 
 ship::ship()
 {
-       shipname = "basic";
+       //shipname = "basic";
        shipsize = 0;
 }
 
 bool ship::IsButtonAShip(int n)
 {
-    //if(shipname == n)
-        //return true;
 
    return false;
 
 }
 
-/*
-//33, 34, 35    40
-QPair<bool, bool> ship::TryAddButtonToShip(int blocks){
-
-    if(shipblocks.size() < 1){
-           shipblocks.push_back(blocks);
-           return QPair<bool,bool>(true,true);
-    }
-
-    else{
-            for(const auto & s : shipblocks){
-
-                     if((s + 10 == blocks || s - 10 == blocks || s - 1 == blocks || s + 1 == blocks) && shipblocks.size() < 2){
-                            shipblocks.push_back(blocks);
-                            std::sort(std::begin(shipblocks), std::end(shipblocks));
-                            return QPair<bool,bool>(true,true);
-                    }
-
-                     else if((s + 10 == blocks || s - 10 == blocks || s - 1 == blocks || s + 1 == blocks) && shipblocks.size() >= 2){
-                            if((int)(shipblocks[0] + ((shipblocks[1] - shipblocks[0]) * shipblocks.size())) == blocks){
-                                 shipblocks.push_back(blocks);
-                                 std::sort(std::begin(shipblocks), std::end(shipblocks));
-                                 return QPair<bool,bool>(true,true);
-                            }
-                            else{
-                                return QPair<bool,bool>(true,false);
-                            }
-                    }
-
-                     else if (s + 10 + 1 == blocks || s + 10 - 1 == blocks || s - 10 + 1 == blocks || s - 10 - 1 == blocks) {
-                         return QPair<bool,bool>(true, false);
-                     }
-
-            }
-    }
-
-
-    return QPair<bool,bool>(false,false);
-}*/
-
 
 bool ship::AdditionValidation(button *b){
+
+    delete buttons;
 
     return true;
 }
 
 
 
-QPair<bool, bool> ship::TryAddButtonToShip(button *b){
+bool ship::TryAddButtonToShip(button *b){
 
 
 
     if(shipvec.size() < 1){
            shipvec.push_back(b);
-           return QPair<bool,bool>(true,true);
+           DisconnectButton(b);
+           shipsinfleet++;
+           return true;
     }
 
     else{
             for(const auto & s : shipvec){
 
-                if(shipvec.size() < 2){
+                /*if(shipvec.size() < 2){
 
                         if((b->GetRow() + 1 == s->GetRow() || b->GetRow() - 1 == s->GetRow()) && b->GetCol() == s->GetCol()){
                             shipvec.push_back(b);
                             std::sort(std::begin(shipblocks), std::end(shipblocks));
-                            layout = Layout::Vertical;
+                            DisconnectButton(b);
                             return QPair<bool,bool>(true,true);
                         }
 
                         else if((b->GetCol() + 1 == s->GetCol() || b->GetCol() - 1 == s->GetCol()) && (b->GetRow() == s->GetRow())){
                             shipvec.push_back(b);
                             std::sort(std::begin(shipblocks), std::end(shipblocks));
-                            layout = Layout::Horizontal;
+                            DisconnectButton(b);
                             return QPair<bool,bool>(true,true);
                         }
 
-                }
+                }*/
 
-               else{
+               //else{
                         if((b->GetCol() == s->GetCol()) && (b->GetRow() + 1 == s->GetRow() || b->GetRow() - 1 == s->GetRow())){
-                            if(layout == Layout::Horizontal)   return QPair<bool,bool>(true,false);
-                            else if(layout == Layout::Vertical){
                                 shipvec.push_back(b);
                                 sortRow();
-                                return QPair<bool,bool>(true,true);
-                            }
+                                DisconnectButton(b);
+                                shipsinfleet++;
+                                return true;
                         }
 
 
 
                         else if((b->GetRow() == s->GetRow()) && (b->GetCol() + 1 == s->GetCol() || b->GetCol() - 1 == s->GetCol())){
-                             if(layout == Layout::Vertical) return QPair<bool,bool>(true,false);
-                             else if(layout == Layout::Horizontal){
                                 shipvec.push_back(b);
                                 sortCol();
-                                return QPair<bool,bool>(true,true);
-                             }
+                                DisconnectButton(b);
+                                shipsinfleet++;
+                                return true;
                         }
 
 
                }
             }
-    }
+   // }
 
-    return QPair<bool,bool>(false,false);
+    return false;
 
+
+}
+
+
+
+void ship::DisconnectButton(button *b){
+
+
+        int x = b->GetRow()-2;
+        int y = b->GetCol()%65-1;
+
+         if((x >= 0 && x <= 9) && (y >= 0 && y <= 9))
+            (*buttons)[x][y]->disconnect();
+
+         y += 2;
+
+         if((x >= 0 && x <= 9) && (y >= 0 && y <= 9))
+            (*buttons)[x][y]->disconnect();
+
+         x += 2;
+         if((x >= 0 && x <= 9) && (y >= 0 && y <= 9))
+            (*buttons)[x][y]->disconnect();
+
+
+         y -= 2;
+         if((x >= 0 && x <= 9) && (y >= 0 && y <= 9))
+            (*buttons)[x][y]->disconnect();
 
 }
 
