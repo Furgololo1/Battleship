@@ -175,7 +175,7 @@ void Base::on_pushButton_2_clicked()
 
 }
 
-
+//aaaaa test
 
 void Base::CheckShipsCorrectness(){
     const int ship4 = 1;
