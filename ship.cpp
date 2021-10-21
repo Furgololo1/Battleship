@@ -1,7 +1,7 @@
 #include "ship.h"
 
 
-int ship::shipscount[4]{0,0,0,0};
+std::vector<int> ship::shipscount(8, 0);
 
 ship::ship()
 {
@@ -31,50 +31,46 @@ bool ship::TryAddButtonToShip(button *b){
 
 
     if(shipvec.size() < 1){
+        if(CheckAmountOfShips(shipsinfleet + 1)){
            shipvec.push_back(b);
            DisconnectButton(b);
            shipsinfleet++;
+           shipscount.at(index) = shipsinfleet;
+           qDebug()<<"on index "<< index <<" ship size: "<<shipscount.at(index);
            return true;
+        }
+        return false;
     }
 
     else{
             for(const auto & s : shipvec){
 
-                /*if(shipvec.size() < 2){
-
-                        if((b->GetRow() + 1 == s->GetRow() || b->GetRow() - 1 == s->GetRow()) && b->GetCol() == s->GetCol()){
-                            shipvec.push_back(b);
-                            std::sort(std::begin(shipblocks), std::end(shipblocks));
-                            DisconnectButton(b);
-                            return QPair<bool,bool>(true,true);
-                        }
-
-                        else if((b->GetCol() + 1 == s->GetCol() || b->GetCol() - 1 == s->GetCol()) && (b->GetRow() == s->GetRow())){
-                            shipvec.push_back(b);
-                            std::sort(std::begin(shipblocks), std::end(shipblocks));
-                            DisconnectButton(b);
-                            return QPair<bool,bool>(true,true);
-                        }
-
-                }*/
-
-               //else{
                         if((b->GetCol() == s->GetCol()) && (b->GetRow() + 1 == s->GetRow() || b->GetRow() - 1 == s->GetRow())){
+                            if(CheckAmountOfShips(shipsinfleet + 1)){
                                 shipvec.push_back(b);
                                 sortRow();
                                 DisconnectButton(b);
                                 shipsinfleet++;
+                                shipscount.at(index) = shipsinfleet;
+                                qDebug()<<"on index "<< index <<" ship size: "<<shipscount.at(index);
                                 return true;
+                            }
+                            return false;
                         }
 
 
 
                         else if((b->GetRow() == s->GetRow()) && (b->GetCol() + 1 == s->GetCol() || b->GetCol() - 1 == s->GetCol())){
+                            if(CheckAmountOfShips(shipsinfleet + 1)){
                                 shipvec.push_back(b);
                                 sortCol();
                                 DisconnectButton(b);
                                 shipsinfleet++;
+                                shipscount.at(index) = shipsinfleet;
+                                qDebug()<<"on index "<< index <<" ship size: "<<shipscount.at(index);
                                 return true;
+                            }
+                            return false;
                         }
 
 
@@ -112,6 +108,15 @@ void ship::DisconnectButton(button *b){
          if((x >= 0 && x <= 9) && (y >= 0 && y <= 9))
             (*buttons)[x][y]->disconnect();
 
+}
+
+
+//napisz to
+bool ship::CheckAmountOfShips(int shipsizetoadd)
+{
+
+
+    return true;
 }
 
 

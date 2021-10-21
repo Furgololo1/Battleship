@@ -16,19 +16,25 @@
 class ship
 {
 
+    int index = 0;
+
     //ship size
     int shipsize = 0;
 
     //counts ships in fleet of one player
-      int shipsinfleet = 0;
+    int shipsinfleet = 0;
 
 public:
+
     ship();
     ship(std::vector<std::vector<button *> > &tempbuttons): buttons(&tempbuttons){};
-    //ship(int size, QString name,  std::vector<std::vector<button *> > &tempbuttons): shipsize(size), shipname(name), buttons(&tempbuttons){};
+    ship(std::vector<std::vector<button *> > &tempbuttons, int i): buttons(&tempbuttons), index(i){};
+
     ~ship(){delete buttons; shipvec.clear();}
 
     bool IsButtonAShip(int n);
+
+    int GetIndex(){return index;}
 
 
     bool TryAddButtonToShip(button *b);
@@ -39,7 +45,7 @@ public:
 
     std::vector<button *> *GetShipvec(){return &shipvec;}
 
-    static int shipscount[4];
+    static std::vector<int> shipscount;
 
 private:
 
@@ -54,6 +60,10 @@ private:
     void sortCol();
 
     void DisconnectButton(button *b);
+
+    //this function check if there is 1 ship with size 4, 2x3, 3x2, 4x1, if amount of ships is max then function
+    //return false and doesn't add new button to ship. True means that user can add new button to ship.
+    bool CheckAmountOfShips(int shipsizetoadd);
 
 
 };
