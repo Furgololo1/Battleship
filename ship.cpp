@@ -85,6 +85,31 @@ bool ship::TryAddButtonToShip(button *b){
 
 
 
+//napisz to
+bool ship::CheckAmountOfShips(int shipsizetoadd)
+{
+
+    //5-4 = 1; 5-3 = 2; itd;
+
+
+
+    for(int i = 0; i < shipscount.size(); i++)    {
+
+    }
+
+    for(const auto &s : shipscount){
+        if((shipsizetoadd == 4)){
+
+        }
+    }
+
+
+
+    return true;
+}
+
+
+
 void ship::DisconnectButton(button *b){
 
 
@@ -108,15 +133,6 @@ void ship::DisconnectButton(button *b){
          if((x >= 0 && x <= 9) && (y >= 0 && y <= 9))
             (*buttons)[x][y]->disconnect();
 
-}
-
-
-//napisz to
-bool ship::CheckAmountOfShips(int shipsizetoadd)
-{
-
-
-    return true;
 }
 
 
