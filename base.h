@@ -76,11 +76,11 @@ private:
 
     void AssignButtonToShip(button *b);
 
+    void RemoveButtonFromShip(button *b);
+
     void CreateUI();
 
     void CheckShipsCorrectness();
-
-
 
 
 

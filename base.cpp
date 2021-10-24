@@ -106,17 +106,30 @@ void Base::CreateConnection(button *b)
 {
 
  b->connect(b, &button::clicked, this, [b, this]()mutable{
-      AssignButtonToShip(b);
+     if(!b->bisclicked)
+         AssignButtonToShip(b);
+     else
+         RemoveButtonFromShip(b);
  });
 
+}
+
+
+void Base::RemoveButtonFromShip(button *b){
+    b->bisclicked = false;
+    b->setStyleSheet(normalbutton);
 
 }
 
 
 void Base::AssignButtonToShip(button *b){
+
+
     if(ships->size() == 0){
-        ships->push_back(new ship(buttons));
+        ships->push_back(new ship(buttons, 0));
         (*ships)[0]->TryAddButtonToShip(b);
+        b->setStyleSheet(shipsbutton);
+        //b->disconnect();
     }
 
     else{
@@ -124,7 +137,7 @@ void Base::AssignButtonToShip(button *b){
         int size = ships->size();
 
      //first bool - when true meets the conditions for adding, second bool - can be add
-        bool state = false;
+        QPair<bool,bool> state = QPair<bool,bool>(false,false);
 
 
         //section 2
@@ -132,24 +145,25 @@ void Base::AssignButtonToShip(button *b){
 
             state = (*ships)[i]->TryAddButtonToShip(b);
 
-            if(state){
+            if((state.first == true) && (state.second == true)){
                   b->setStyleSheet(shipsbutton);
-                  b->disconnect();
+                  //b->disconnect();
                  // return;
             }
 
+            else if((state.first == false) && (state.second == true)) return;
+
         }
 
-        if(!state){
-               ships->push_back(new ship(buttons));
+        if((state.first == false) && (state.second == false)){
+               ships->push_back(new ship(buttons, ships->size()));
                (*ships)[ships->size()-1]->TryAddButtonToShip(b);
+               b->setStyleSheet(shipsbutton);
+               //b->disconnect();
         }
 
     }
-
-    b->setStyleSheet(shipsbutton);
-    b->disconnect();
-
+    b->bisclicked = true;
 }
 
 
@@ -160,10 +174,10 @@ void Base::on_pushButton_2_clicked()
 
     int size = ships->size();
 
-    qDebug()<<"Vector of ships size : "<<size;
+//    qDebug()<<"Vector of ships size : "<<size;
 
     for(int i = 0; i < size; i++){
-        qDebug()<<"Ship nr " << i;
+        qDebug()<<"Ship nr " <<  (*ships)[i]->GetIndex();
 
               for(const auto &s : *(*ships)[i]->GetShipvec()){
                     qDebug()<<"Ship :"<<s->GetName() ;
@@ -178,44 +192,8 @@ void Base::on_pushButton_2_clicked()
 //aaaaa test
 
 void Base::CheckShipsCorrectness(){
-    const int ship4 = 1;
-    const int ship3 = 2;
-    const int ship2 = 3;
-    const int ship1 = 4;
-
-    int size = ships->size();
-
-    int count = 0;
-
-    for(int i = 0; i < size; i++){
-        if((*ships)[i]->GetShipsize()){
-
-        }
-    }
-
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

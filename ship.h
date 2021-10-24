@@ -36,8 +36,7 @@ public:
 
     int GetIndex(){return index;}
 
-
-    bool TryAddButtonToShip(button *b);
+    QPair<bool,bool> TryAddButtonToShip(button *b);
 
     bool AdditionValidation(button *b);
 
@@ -45,7 +44,8 @@ public:
 
     std::vector<button *> *GetShipvec(){return &shipvec;}
 
-    static std::vector<int> shipscount;
+    static std::vector<int> shipssize;
+    static std::vector<int> shipsamount;
 
 private:
 

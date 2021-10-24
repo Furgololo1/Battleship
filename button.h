@@ -12,7 +12,6 @@ class button : public QPushButton
     int row = 0;
     bool isadded = false;
 
-
 public:
     button();
     ~button(){};
@@ -33,6 +32,8 @@ public:
     int GetRow(){return row;}
     bool IsAdded(){return isadded;}
     void Add(bool state){ isadded = state;}
+
+    bool bisclicked = false;
 
 private:
 

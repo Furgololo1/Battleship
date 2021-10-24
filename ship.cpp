@@ -1,7 +1,7 @@
 #include "ship.h"
 
-
-std::vector<int> ship::shipscount(8, 0);
+std::vector<int> ship::shipssize(10, 0);
+std::vector<int> ship::shipsamount(4, 0);
 
 ship::ship()
 {
@@ -26,7 +26,7 @@ bool ship::AdditionValidation(button *b){
 
 
 
-bool ship::TryAddButtonToShip(button *b){
+QPair<bool,bool> ship::TryAddButtonToShip(button *b){
 
 
 
@@ -35,11 +35,12 @@ bool ship::TryAddButtonToShip(button *b){
            shipvec.push_back(b);
            DisconnectButton(b);
            shipsinfleet++;
-           shipscount.at(index) = shipsinfleet;
-           qDebug()<<"on index "<< index <<" ship size: "<<shipscount.at(index);
-           return true;
+           //qDebug()<<"on index "<< index <<" ship size: "<<shipssize.at(index);
+           qDebug()<<"index "<<this->GetIndex();
+           return QPair<bool,bool>(true,true);
         }
-        return false;
+        else
+            return QPair<bool,bool>(false,false);
     }
 
     else{
@@ -51,11 +52,12 @@ bool ship::TryAddButtonToShip(button *b){
                                 sortRow();
                                 DisconnectButton(b);
                                 shipsinfleet++;
-                                shipscount.at(index) = shipsinfleet;
-                                qDebug()<<"on index "<< index <<" ship size: "<<shipscount.at(index);
-                                return true;
+                                //qDebug()<<"on index "<< index <<" ship size: "<<shipssize.at(index);
+                                qDebug()<<"index "<<this->GetIndex();
+                                return QPair<bool,bool>(true,true);
                             }
-                            return false;
+                            else
+                                return QPair<bool,bool>(false,true);
                         }
 
 
@@ -66,11 +68,12 @@ bool ship::TryAddButtonToShip(button *b){
                                 sortCol();
                                 DisconnectButton(b);
                                 shipsinfleet++;
-                                shipscount.at(index) = shipsinfleet;
-                                qDebug()<<"on index "<< index <<" ship size: "<<shipscount.at(index);
-                                return true;
+                                //qDebug()<<"on index "<< index <<" ship size: "<<shipssize.at(index);
+                                qDebug()<<"index "<<this->GetIndex();
+                                return QPair<bool,bool>(true,true);
                             }
-                            return false;
+                            else
+                                return QPair<bool,bool>(false,true);
                         }
 
 
@@ -78,7 +81,7 @@ bool ship::TryAddButtonToShip(button *b){
             }
    // }
 
-    return false;
+    return QPair<bool,bool>(false,false);
 
 
 }
@@ -88,21 +91,28 @@ bool ship::TryAddButtonToShip(button *b){
 //napisz to
 bool ship::CheckAmountOfShips(int shipsizetoadd)
 {
+    if(shipsizetoadd > 4)return false;
+
+    const int five = 5;
+
+    for(int i = 1; i <= 4; i++){
+            if(shipsamount[i-1] >= five-i)return false;
+        }
+        shipssize[index]++;
+
 
     //5-4 = 1; 5-3 = 2; itd;
 
+    int count = 0;
 
-
-    for(int i = 0; i < shipscount.size(); i++)    {
-
-    }
-
-    for(const auto &s : shipscount){
-        if((shipsizetoadd == 4)){
-
+    for(int i = 1; i <= 4; i++){
+        for(const auto &s : shipssize){
+            if(s == i)count++;
         }
+        qDebug()<<"there are "<<count<<" ships on size "<<i;
+        shipsamount[i-1] = count;
+        count = 0;
     }
-
 
 
     return true;
@@ -139,7 +149,7 @@ void ship::DisconnectButton(button *b){
 
 void ship::sortRow(){
 
-    int size = shipvec.size();
+    int size = (int)shipvec.size();
 
     do{
         for(int i = 1; i < size; i++){
@@ -156,7 +166,7 @@ void ship::sortRow(){
 
 void ship::sortCol(){
 
-    int size = shipvec.size();
+    int size = (int)shipvec.size();
 
     do{
         for(int i = 1; i < size; i++){
