@@ -31,55 +31,36 @@ QPair<bool,bool> ship::TryAddButtonToShip(button *b){
 
 
     if(shipvec.size() < 1){
-        if(CheckAmountOfShips(shipsinfleet + 1)){
            shipvec.push_back(b);
            DisconnectButton(b);
            shipsinfleet++;
-           //qDebug()<<"on index "<< index <<" ship size: "<<shipssize.at(index);
-           qDebug()<<"index "<<this->GetIndex();
            return QPair<bool,bool>(true,true);
-        }
-        else
-            return QPair<bool,bool>(false,false);
     }
 
     else{
             for(const auto & s : shipvec){
 
                         if((b->GetCol() == s->GetCol()) && (b->GetRow() + 1 == s->GetRow() || b->GetRow() - 1 == s->GetRow())){
-                            if(CheckAmountOfShips(shipsinfleet + 1)){
                                 shipvec.push_back(b);
                                 sortRow();
                                 DisconnectButton(b);
                                 shipsinfleet++;
-                                //qDebug()<<"on index "<< index <<" ship size: "<<shipssize.at(index);
-                                qDebug()<<"index "<<this->GetIndex();
                                 return QPair<bool,bool>(true,true);
-                            }
-                            else
-                                return QPair<bool,bool>(false,true);
                         }
 
 
 
                         else if((b->GetRow() == s->GetRow()) && (b->GetCol() + 1 == s->GetCol() || b->GetCol() - 1 == s->GetCol())){
-                            if(CheckAmountOfShips(shipsinfleet + 1)){
                                 shipvec.push_back(b);
                                 sortCol();
                                 DisconnectButton(b);
                                 shipsinfleet++;
-                                //qDebug()<<"on index "<< index <<" ship size: "<<shipssize.at(index);
-                                qDebug()<<"index "<<this->GetIndex();
                                 return QPair<bool,bool>(true,true);
-                            }
-                            else
-                                return QPair<bool,bool>(false,true);
                         }
 
 
                }
             }
-   // }
 
     return QPair<bool,bool>(false,false);
 
@@ -88,7 +69,6 @@ QPair<bool,bool> ship::TryAddButtonToShip(button *b){
 
 
 
-//napisz to
 bool ship::CheckAmountOfShips(int shipsizetoadd)
 {
     if(shipsizetoadd > 4)return false;
@@ -145,6 +125,17 @@ void ship::DisconnectButton(button *b){
 
 }
 
+
+bool ship::RemoveFromShip(button *b){
+
+    //this is iterator to remove if button exists in shipvec
+    auto itr = std::find(shipvec.begin(), shipvec.end(), b);
+
+    if(itr != shipvec.end())
+        shipvec.erase(itr);
+
+    return false;
+}
 
 
 void ship::sortRow(){

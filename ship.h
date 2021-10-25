@@ -44,6 +44,8 @@ public:
 
     std::vector<button *> *GetShipvec(){return &shipvec;}
 
+    bool RemoveFromShip(button *b);
+
     static std::vector<int> shipssize;
     static std::vector<int> shipsamount;
 
