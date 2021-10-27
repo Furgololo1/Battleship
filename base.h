@@ -65,10 +65,6 @@ private:
 
     std::vector<std::vector<button *> > enemybuttons;
 
-    std::vector<QLabel *> *labels = nullptr;
-
-
-
 
     //                              functions
 
@@ -81,6 +77,8 @@ private:
     void CreateUI();
 
     void CheckShipsCorrectness();
+
+    void CheckShipAmount();
 
 
 

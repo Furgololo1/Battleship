@@ -168,6 +168,8 @@ void Base::AssignButtonToShip(button *b){
 
     }
     b->bisclicked = true;
+
+
 }
 
 
@@ -196,6 +198,17 @@ void Base::on_pushButton_2_clicked()
 //aaaaa test
 
 void Base::CheckShipsCorrectness(){
+
+}
+
+void Base::CheckShipAmount()
+{
+
+
+
+
+
+
 
 }
 
