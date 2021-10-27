@@ -119,8 +119,8 @@ void Base::RemoveButtonFromShip(button *b){
     b->bisclicked = false;
     b->setStyleSheet(normalbutton);
 
-    for(const auto &s : *ships){
-        qDebug()<<s->RemoveFromShip(b);
+    for(int i = 0; i < ships->size(); i++){
+        if((*ships)[i]->RemoveFromShip(b))ships->erase((*ships).begin()+i);
     }
 
 }

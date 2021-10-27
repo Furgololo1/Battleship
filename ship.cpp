@@ -134,6 +134,10 @@ bool ship::RemoveFromShip(button *b){
     if(itr != shipvec.end())
         shipvec.erase(itr);
 
+
+    if(shipvec.size() == 0)
+        return true;
+
     return false;
 }
 
