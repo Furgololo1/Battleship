@@ -17,11 +17,20 @@ bool ship::IsButtonAShip(int n)
 }
 
 
-bool ship::AdditionValidation(button *b){  
+bool ship::AdditionValidation(){
 
-    delete buttons;
+    //delete buttons;
+    const int size = shipvec.size();
 
-    return true;
+
+    if((shipvec[0]->GetCol() + (size-1) == shipvec[size-1]->GetCol()) || (shipvec[0]->GetCol() - (size-1) == shipvec[size-1]->GetCol()))
+        return true;
+
+    else if((shipvec[0]->GetRow() + (size-1) == shipvec[size-1]->GetRow()) || (shipvec[0]->GetRow() - (size-1) == shipvec[size-1]->GetRow()))
+        return true;
+
+    else
+        return false;
 }
 
 
@@ -128,11 +137,29 @@ void ship::DisconnectButton(button *b){
 
 bool ship::RemoveFromShip(button *b){
 
+    QString normalbutton = "QPushButton{background-color: #FFFFFF;   border: none;   color: #000000;   padding: 15px 32px;    text-align: center;   text-decoration: none;    }";
+
     //this is iterator to remove if button exists in shipvec
     auto itr = std::find(shipvec.begin(), shipvec.end(), b);
 
-    if(itr != shipvec.end())
-        shipvec.erase(itr);
+    qDebug()<<"size: "<<shipvec.size();
+
+//        shipvec.erase(itr);
+
+        //std::remove(shipvec.begin(), shipvec.end(), b);
+        //shipvec.shrink_to_fit();
+        b->bisclicked = false;
+        b->setStyleSheet(normalbutton);
+
+        qDebug()<<"size: "<<shipvec.size();
+
+           // auto itend = shipvec.end();
+
+//        if(!AdditionValidation()){
+//            qDebug()<<"size: "<<shipvec.size();
+//        }
+
+
 
 
     if(shipvec.size() == 0)

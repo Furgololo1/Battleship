@@ -116,8 +116,7 @@ void Base::CreateConnection(button *b)
 
 
 void Base::RemoveButtonFromShip(button *b){
-    b->bisclicked = false;
-    b->setStyleSheet(normalbutton);
+
 
     for(int i = 0; i < ships->size(); i++){
         if((*ships)[i]->RemoveFromShip(b))ships->erase((*ships).begin()+i);
@@ -183,9 +182,10 @@ void Base::on_pushButton_2_clicked()
 //    qDebug()<<"Vector of ships size : "<<size;
 
     for(int i = 0; i < size; i++){
-        qDebug()<<"Ship nr " <<  (*ships)[i]->GetIndex();
+        qDebug() << "Ship nr " <<  ships->at(i)->GetIndex();
+        qDebug() << "Validation " << ships->at(i)->AdditionValidation();
 
-              for(const auto &s : *(*ships)[i]->GetShipvec()){
+              for(const auto &s : *ships->at(i)->GetShipvec()){
                     qDebug()<<"Ship :"<<s->GetName() ;
               }
 

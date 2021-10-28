@@ -38,7 +38,7 @@ public:
 
     QPair<bool,bool> TryAddButtonToShip(button *b);
 
-    bool AdditionValidation(button *b);
+    bool AdditionValidation();
 
     int GetShipsize(){return shipsinfleet;}
 
