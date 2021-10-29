@@ -141,25 +141,24 @@ bool ship::RemoveFromShip(button *b){
 
     //this is iterator to remove if button exists in shipvec
     auto itr = std::find(shipvec.begin(), shipvec.end(), b);
+    auto ittobuttons = itr;
+
+    while(ittobuttons != shipvec.end()){
+        (*ittobuttons)->bisclicked = false;
+        (*ittobuttons)->setStyleSheet(normalbutton);
+        ittobuttons++;
+
+    }
 
     qDebug()<<"size: "<<shipvec.size();
 
-//        shipvec.erase(itr);
 
-        //std::remove(shipvec.begin(), shipvec.end(), b);
-        //shipvec.shrink_to_fit();
+    shipvec.erase(itr, shipvec.end());
+
         b->bisclicked = false;
         b->setStyleSheet(normalbutton);
 
         qDebug()<<"size: "<<shipvec.size();
-
-           // auto itend = shipvec.end();
-
-//        if(!AdditionValidation()){
-//            qDebug()<<"size: "<<shipvec.size();
-//        }
-
-
 
 
     if(shipvec.size() == 0)

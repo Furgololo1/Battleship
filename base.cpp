@@ -52,9 +52,9 @@ void Base::CreateEnemyButtons(){
             enemybuttons[i][j]->setParent(this);
             enemybuttons[i][j]->resize(buttonsize, buttonsize);
             enemybuttons[i][j]->move(x,y);
-            enemybuttons[i][j]->setStyleSheet(normalbutton);
+            enemybuttons[i][j]->setStyleSheet(normalenemybutton);
             enemybuttons[i][j]->SetName((QChar)letter, number);
-            enemybuttons[i][j]->setText(letter + QString::number(number));
+            //enemybuttons[i][j]->setText(letter + QString::number(number));
            // CreateConnection(enemybuttons[i][j]);
 
             x+=25;
@@ -85,7 +85,7 @@ void Base::CreateButtons(){
             buttons[i][j]->move(x,y);
             buttons[i][j]->setStyleSheet(normalbutton);
             buttons[i][j]->SetName((QChar)letter, number);
-            buttons[i][j]->setText(letter + QString::number(number));
+            //buttons[i][j]->setText(letter + QString::number(number));
             CreateConnection(buttons[i][j]);
             
             x+=25;

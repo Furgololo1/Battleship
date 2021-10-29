@@ -19,6 +19,9 @@
   <property name="windowTitle">
    <string>Base</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: #FFFFFF;</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
@@ -28,6 +31,10 @@
       <width>80</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-width: 1px;
+border-color: solid black;</string>
     </property>
     <property name="text">
      <string>new ship</string>
@@ -41,6 +48,10 @@
       <width>80</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-width: 1px;
+border-color: solid black;</string>
     </property>
     <property name="text">
      <string>Show ships</string>
@@ -64,7 +75,7 @@
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: #056DE3;</string>
+     <string notr="true">/*color: #FFFFFF;</string>
     </property>
     <property name="text">
      <string>Twoja flota</string>
@@ -91,7 +102,7 @@
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: #FA5F4A;</string>
+     <string notr="true">/*color: #FA5F4A;</string>
     </property>
     <property name="text">
      <string>Flota przeciwnika</string>

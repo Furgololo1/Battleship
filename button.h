@@ -8,7 +8,7 @@ class button : public QPushButton
 
     QString name = "";
     QString roww = "1";
-    QChar col = 'A';
+    QChar col = '0';
     int row = 0;
     bool isadded = false;
 
