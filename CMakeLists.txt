@@ -26,15 +26,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Network REQUIRED)
+
 
 if(ANDROID)
   add_library(Battleship SHARED
-    main.cpp
-    button.cpp
-    button.h
-    base.cpp
-    base.h
-    base.ui
+      main.cpp
+      base.cpp
+      base.h
+      button.cpp
+      button.h
+      ship.cpp
+      ship.h
+      base.ui
   )
 else()
   add_executable(Battleship
@@ -50,3 +54,4 @@ else()
 endif()
 
 target_link_libraries(Battleship PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(Battleship PRIVATE Qt${QT_VERSION_MAJOR}::Network)
