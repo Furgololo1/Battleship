@@ -4,7 +4,10 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QDebug>
+#include <QPair>
+#include <QLabel>
 #include <vector>
+
 
 
 #include "button.h"
@@ -24,43 +27,46 @@ public:
 
 
     void CreateButtons();
-public slots:
-
-
-    void test(){
-        buttons[0][0]->setStyleSheet(shipsbutton);
-    };
+    void CreateEnemyButtons();
 
 
 private slots:
-    void on_pushButton_clicked();
-
 
     void on_pushButton_2_clicked();
+
+    void on_pushButton_clicked();
 
 private:
     Ui::Base *ui;
 
+    bool bcanplay = false;
+
     //size of
     int shipsize = 0;
 
-    int x = 10, y = 10;
+    int x = 10, y = 45;
     int buttonsize = 20;
 
-    QString normalbutton = "QPushButton{background-color: #BFCDE0;   border: none;   color: white;   padding: 15px 32px;    text-align: center;   text-decoration: none;    }";
+    QString normalbutton = "QPushButton{background-color: #FFFFFF;   border: 1px; border-color: #056DE3;   border-style: solid;  color: #000000;   padding: 15px 32px;    text-align: center;   text-decoration: none;    }";
+    QString normalenemybutton = "QPushButton{background-color: #FFFFFF;   border: 1px; border-color: #F44336;   border-style: solid;  color: #000000;   padding: 15px 32px;    text-align: center;   text-decoration: none;    }";
 
-    QString shipsbutton = "QPushButton{background-color: #056DE3;   border: none;   color: white;   padding: 15px 32px;    text-align: center;   text-decoration: none;    }";
+    QString shipsbutton = "QPushButton{background-color: #056DE3;   border: none; color: white;   padding: 15px 32px;    text-align: center;   text-decoration: none;    }";
 
 
-    //ships
+//056DE3
+
+    //      ships
     std::vector<ship *> *ships = nullptr;
 
+    //      gui
+    std::vector<QLabel *>* labels = nullptr;
 
 
-    //vector of all buttons in game
+    //      vector of all buttons in game
+
     std::vector<std::vector<button *> > buttons;
 
-
+    std::vector<std::vector<button *> > enemybuttons;
 
 
     //                              functions
@@ -69,7 +75,11 @@ private:
 
     void AssignButtonToShip(button *b);
 
+    void RemoveButtonFromShip(button *b);
 
+    void CreateUI();
+
+    void CheckShipAmount();
 
 
 

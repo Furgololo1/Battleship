@@ -1,39 +1,64 @@
 #ifndef SHIP_H
 #define SHIP_H
 
+
+
 #include <QString>
-
+#include <QPair>
+#include <QDebug>
+#include <algorithm>
 #include <vector>
+#include <iostream>
+#include <iterator>
 
+#include "button.h"
 
 
 class ship
 {
-    //ship size
-    int shipsize = 0;
 
-    QString shipname = "basic";
+    int index = 0;
 
-    //counts ships in fleet of one player
-  //  static int shipsinfleet = 0;
+    //counts buttons in one ship (vector)
+    int shipsinfleet = 0;
 
 public:
+
     ship();
-    ship(int size, QString name): shipsize(size), shipname(name){};
-    ~ship(){};
+    ship(std::vector<std::vector<button *> > &tempbuttons): buttons(&tempbuttons){};
+    ship(std::vector<std::vector<button *> > &tempbuttons, int i): buttons(&tempbuttons), index(i){};
 
-    bool IsButtonAShip(QString n);
+    ~ship(){delete buttons; shipvec.clear();}
 
-    void AddButtonToShip(QString blocks){  shipblocks.push_back(blocks);  }
+    int GetIndex(){return index;}
 
-    QString GetShipName(){return shipname;}
+    QPair<bool,bool> TryAddButtonToShip(button *b);
 
-    std::vector<QString> *GetShipBlocks(){return &shipblocks;}
+    bool AdditionValidation();
+
+    int GetShipsize(){return shipsinfleet;}
+
+    std::vector<button *> *GetShipvec(){return &shipvec;}
+
+    bool RemoveFromShip(button *b);
+
+    void Merge(ship* s);
+
 
 private:
 
-    //ship blocks
-    std::vector<QString> shipblocks;
+    //ship components
+    std::vector<button *> shipvec;
+
+    //temporary buttons for disconnecting
+    std::vector<std::vector<button *> > *buttons = nullptr;
+
+
+    void sortRow();
+    void sortCol();
+
+    void DisableButton(button *b);
+    void EnableButtons(button *b);
 
 
 };
