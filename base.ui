@@ -23,28 +23,11 @@
    <string notr="true">background-color: #FFFFFF;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>290</x>
-      <y>40</y>
-      <width>80</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border-width: 1px;
-border-color: solid black;</string>
-    </property>
-    <property name="text">
-     <string>new ship</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
       <x>290</x>
-      <y>70</y>
+      <y>270</y>
       <width>80</width>
       <height>21</height>
      </rect>
@@ -111,124 +94,17 @@ border-color: solid black;</string>
      <set>Qt::AlignBottom|Qt::AlignHCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="bigship">
+   <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
       <x>280</x>
-      <y>120</y>
+      <y>30</y>
       <width>101</width>
       <height>31</height>
      </rect>
     </property>
-    <property name="font">
-     <font>
-      <family>Arial Black</family>
-      <pointsize>12</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QLabel{
-background-color:#FF004B;
-color: rgb(0,0,0);
-}</string>
-    </property>
     <property name="text">
-     <string>0/1</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="mediumship">
-    <property name="geometry">
-     <rect>
-      <x>290</x>
-      <y>160</y>
-      <width>81</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Arial Black</family>
-      <pointsize>12</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QLabel{
-background-color:#FF004B;
-color: rgb(0,0,0);
-}</string>
-    </property>
-    <property name="text">
-     <string>0/2</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="medium2ship">
-    <property name="geometry">
-     <rect>
-      <x>300</x>
-      <y>200</y>
-      <width>61</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Arial Black</family>
-      <pointsize>12</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QLabel{
-background-color:#FF004B;
-color: rgb(0,0,0);
-}</string>
-    </property>
-    <property name="text">
-     <string>0/3</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="smallship">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>240</y>
-      <width>41</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Arial Black</family>
-      <pointsize>12</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QLabel{
-background-color:#FF004B;
-color: rgb(0,0,0);
-}</string>
-    </property>
-    <property name="text">
-     <string>0/4</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
+     <string>Play</string>
     </property>
    </widget>
   </widget>

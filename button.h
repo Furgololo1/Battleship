@@ -7,7 +7,6 @@ class button : public QPushButton
 {
 
     QString name = "";
-    QString roww = "1";
     QChar col = '0';
     int row = 0;
     bool isadded = false;
@@ -16,11 +15,6 @@ public:
     button();
     ~button(){};
 
-    void SetName(QChar c, QString r){
-        name = c + r;
-        roww = r;
-        col = c;
-    }
     void SetName(QChar c, int r){
         name = c + QString::number(r);
         row = r;
@@ -28,9 +22,13 @@ public:
     }
 
     QString GetName(){return name;}
+
     int GetCol(){return (int)col.toLatin1();}
+
     int GetRow(){return row;}
+
     bool IsAdded(){return isadded;}
+
     void Add(bool state){ isadded = state;}
 
     bool bisclicked = false;

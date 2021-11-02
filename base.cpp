@@ -11,6 +11,8 @@ Base::Base(QWidget *parent)
 
     ships = new std::vector<ship *>();
 
+    ui->pushButton->setDisabled(true);
+
     CreateButtons();
     CreateEnemyButtons();
     CreateUI();
@@ -25,11 +27,23 @@ Base::~Base()
 
 void Base::CreateUI(){
 
-//    labels = new std::vector<QLabel*>();
+    QString labelstyle = "QLabel{ background-color:#FF004B; color: rgb(0,0,0); font-family: 'Arial Black'; font-size: 18px; }";
 
-//    labels->push_back(new QLabel("Twoja flota", this));
-//    (*labels)[0]->setFont(QFont("Arial Black", 15, 1, false));
-//    (*labels)[0]->move(50, 20);
+    labels = new std::vector<QLabel *>();
+
+    int x = 270, y = 120;
+    int sizex = 120, sizey = 30;
+
+    for(int i = 0; i < 4; i++){
+        labels->push_back(new QLabel("0/"+QString::number(i+1), this));
+        (*labels)[i]->move(x,y);
+        (*labels)[i]->setFixedSize(sizex,sizey);
+        (*labels)[i]->setStyleSheet(labelstyle);
+        (*labels)[i]->setAlignment(Qt::Alignment::enum_type::AlignHCenter);
+        x += 10;
+        y += 40;
+        sizex -= 20;
+    }
 
 }
 
@@ -110,7 +124,7 @@ void Base::CreateConnection(button *b)
          AssignButtonToShip(b);
      else
          RemoveButtonFromShip(b);
- });
+     });
 
 }
 
@@ -121,6 +135,7 @@ void Base::RemoveButtonFromShip(button *b){
     for(int i = 0; i < ships->size(); i++){
         if((*ships)[i]->RemoveFromShip(b))ships->erase((*ships).begin()+i);
     }
+    CheckShipAmount();
 
 }
 
@@ -138,6 +153,8 @@ void Base::AssignButtonToShip(button *b){
     else{
 
         int size = ships->size();
+        bool isadded = false;
+        int indextoadded = 0;
 
      //first bool - when true meets the conditions for adding, second bool - can be add
         QPair<bool,bool> state = QPair<bool,bool>(false,false);
@@ -150,8 +167,14 @@ void Base::AssignButtonToShip(button *b){
 
             if((state.first == true) && (state.second == true)){
                   b->setStyleSheet(shipsbutton);
-                  //b->disconnect();
-                 // return;
+
+                  if(isadded){
+                      ships->at(indextoadded)->Merge(ships->at(i));
+                      ships->erase(ships->begin()+i);
+                  }
+
+                  isadded = true;
+                  indextoadded = i;
             }
 
             else if((state.first == false) && (state.second == true)) return;
@@ -162,11 +185,11 @@ void Base::AssignButtonToShip(button *b){
                ships->push_back(new ship(buttons, ships->size()));
                (*ships)[ships->size()-1]->TryAddButtonToShip(b);
                b->setStyleSheet(shipsbutton);
-               //b->disconnect();
         }
 
     }
     b->bisclicked = true;
+    CheckShipAmount();
 
 
 }
@@ -175,11 +198,12 @@ void Base::AssignButtonToShip(button *b){
 
 void Base::on_pushButton_2_clicked()
 {
-    if(!ships) return;
+    /*if(!ships) return;
 
     int size = ships->size();
 
-//    qDebug()<<"Vector of ships size : "<<size;
+    qDebug()<<"#####################    Clicked button    #####################";
+    qDebug()<<"bcanplay = "<<bcanplay;
 
     for(int i = 0; i < size; i++){
         qDebug() << "Ship nr " <<  ships->at(i)->GetIndex();
@@ -193,24 +217,60 @@ void Base::on_pushButton_2_clicked()
 
     }
 
-}
-
-//aaaaa test
-
-void Base::CheckShipsCorrectness(){
+    CheckShipAmount();*/
 
 }
+
 
 void Base::CheckShipAmount()
 {
+    std::vector<int>* countships = new std::vector<int>();
+
+    QString labelstyle1 = "QLabel{ background-color: ";
+    QString labelstyle2 = "; color: rgb(0,0,0); font-family: 'Arial Black'; font-size: 18px; }";
+
+    for(const auto &s : *ships)
+            countships->push_back(s->GetShipsize());
+
+    std::vector<bool>* bisokay = new std::vector<bool>(4,false);
+
+        int i = 1;
+        int count;
+        for(const auto &l : *labels){
+            count = std::count(countships->begin(), countships->end(), (5-i));
+            l->setText(QString::number(count) + "/" + QString::number(i));
+
+            if(count != i)
+                l->setStyleSheet(labelstyle1 + "#FF004B" + labelstyle2);
+            else{
+                bisokay->at(i-1) = true;
+                l->setStyleSheet(labelstyle1 + "#43A047" + labelstyle2);
+            }
+
+            i++;
+        }
+
+    for(const auto &v : *bisokay){
+        if(!v){
+            bcanplay = false;
+            ui->pushButton->setDisabled(true);
+            break;
+        }
+        else{
+            bcanplay = true;
+            ui->pushButton->setDisabled(false);
+        }
+    }
 
 
 
-
-
-
+    delete bisokay;
+    delete countships;
 
 }
 
 
-
+void Base::on_pushButton_clicked()
+{
+    qDebug()<<"Starting Game";
+}

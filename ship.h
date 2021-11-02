@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <vector>
 #include <iostream>
+#include <iterator>
 
 #include "button.h"
 
@@ -18,10 +19,7 @@ class ship
 
     int index = 0;
 
-    //ship size
-    int shipsize = 0;
-
-    //counts ships in fleet of one player
+    //counts buttons in one ship (vector)
     int shipsinfleet = 0;
 
 public:
@@ -31,8 +29,6 @@ public:
     ship(std::vector<std::vector<button *> > &tempbuttons, int i): buttons(&tempbuttons), index(i){};
 
     ~ship(){delete buttons; shipvec.clear();}
-
-    bool IsButtonAShip(int n);
 
     int GetIndex(){return index;}
 
@@ -46,8 +42,8 @@ public:
 
     bool RemoveFromShip(button *b);
 
-    static std::vector<int> shipssize;
-    static std::vector<int> shipsamount;
+    void Merge(ship* s);
+
 
 private:
 
@@ -61,11 +57,8 @@ private:
     void sortRow();
     void sortCol();
 
-    void DisconnectButton(button *b);
-
-    //this function check if there is 1 ship with size 4, 2x3, 3x2, 4x1, if amount of ships is max then function
-    //return false and doesn't add new button to ship. True means that user can add new button to ship.
-    bool CheckAmountOfShips(int shipsizetoadd);
+    void DisableButton(button *b);
+    void EnableButtons(button *b);
 
 
 };
