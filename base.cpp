@@ -7,11 +7,10 @@ Base::Base(QWidget *parent)
 {
     ui->setupUi(this);
 
-    this->resize(655,300);
+    this->resize(910,302);
 
     ships = new std::vector<ship *>();
 
-    ui->pushButton->setDisabled(true);
 
     CreateButtons();
     CreateEnemyButtons();
@@ -25,106 +24,40 @@ Base::~Base()
 }
 
 
-void Base::CreateUI(){
-
-    QString labelstyle = "QLabel{ background-color:#FF004B; color: rgb(0,0,0); font-family: 'Arial Black'; font-size: 18px; }";
-
-    labels = new std::vector<QLabel *>();
-
-    int x = 270, y = 120;
-    int sizex = 120, sizey = 30;
-
-    for(int i = 0; i < 4; i++){
-        labels->push_back(new QLabel("0/"+QString::number(i+1), this));
-        (*labels)[i]->move(x,y);
-        (*labels)[i]->setFixedSize(sizex,sizey);
-        (*labels)[i]->setStyleSheet(labelstyle);
-        (*labels)[i]->setAlignment(Qt::Alignment::enum_type::AlignHCenter);
-        x += 10;
-        y += 40;
-        sizex -= 20;
-    }
-
-}
-
-
-void Base::CreateEnemyButtons(){
-
-    x = 400;
-    y = 45;
-
-    enemybuttons.push_back(std::vector<button *>());
-
-    int number = 1;
-    char letter = 'A';
-
-    for(int i = 0; i < 10; i++){
-        enemybuttons.push_back(std::vector<button *>());
-
-        for(int j = 0; j < 10; j++){
-            enemybuttons[i].push_back(new button());
-            enemybuttons[i][j]->setParent(this);
-            enemybuttons[i][j]->resize(buttonsize, buttonsize);
-            enemybuttons[i][j]->move(x,y);
-            enemybuttons[i][j]->setStyleSheet(normalenemybutton);
-            enemybuttons[i][j]->SetName((QChar)letter, number);
-            //enemybuttons[i][j]->setText(letter + QString::number(number));
-           // CreateConnection(enemybuttons[i][j]);
-
-            x+=25;
-            letter++;
-        }
-        letter = 'A';
-        number++;
-        x = 400;
-        y += 25;
-    }
-}
-
-
-void Base::CreateButtons(){
-
-    buttons.push_back(std::vector<button *>());
-
-    int number = 1;
-    char letter = 'A';
-
-    for(int i = 0; i < 10; i++){
-        buttons.push_back(std::vector<button *>());
-
-        for(int j = 0; j < 10; j++){
-            buttons[i].push_back(new button());
-            buttons[i][j]->setParent(this);
-            buttons[i][j]->resize(buttonsize, buttonsize);
-            buttons[i][j]->move(x,y);
-            buttons[i][j]->setStyleSheet(normalbutton);
-            buttons[i][j]->SetName((QChar)letter, number);
-            //buttons[i][j]->setText(letter + QString::number(number));
-            CreateConnection(buttons[i][j]);
-            
-            x+=25;
-            letter++;
-        }
-        letter = 'A';
-        number++;
-        x = 10;
-        y += 25;
-    }
-
-
-}
-
-
 
 void Base::CreateConnection(button *b)
 {
 
  b->connect(b, &button::clicked, this, [b, this]()mutable{
+
      if(!b->bisclicked)
          AssignButtonToShip(b);
      else
          RemoveButtonFromShip(b);
      });
+
+}
+
+
+void Base::onPlay(){
+    qDebug()<<"Starting Game";
+
+    for(auto &l : *labels)
+        delete l;
+    delete labels;
+
+    disconnect(btn1, &QPushButton::clicked, this, &Base::onPlay);
+    connect(btn1, &QPushButton::clicked, this, &Base::onConnect);
+
+    btn1->setText("Connect with server");
+}
+
+
+void Base::onConnect(){
+    qDebug()<<"New connection";
+
+    conw = new ConnectWindow();
+    conw->show();
 
 }
 
@@ -195,33 +128,6 @@ void Base::AssignButtonToShip(button *b){
 }
 
 
-
-void Base::on_pushButton_2_clicked()
-{
-    /*if(!ships) return;
-
-    int size = ships->size();
-
-    qDebug()<<"#####################    Clicked button    #####################";
-    qDebug()<<"bcanplay = "<<bcanplay;
-
-    for(int i = 0; i < size; i++){
-        qDebug() << "Ship nr " <<  ships->at(i)->GetIndex();
-        qDebug() << "Validation " << ships->at(i)->AdditionValidation();
-
-              for(const auto &s : *ships->at(i)->GetShipvec()){
-                    qDebug()<<"Ship :"<<s->GetName() ;
-              }
-
-        qDebug()<<"";
-
-    }
-
-    CheckShipAmount();*/
-
-}
-
-
 void Base::CheckShipAmount()
 {
     std::vector<int>* countships = new std::vector<int>();
@@ -253,12 +159,12 @@ void Base::CheckShipAmount()
     for(const auto &v : *bisokay){
         if(!v){
             bcanplay = false;
-            ui->pushButton->setDisabled(true);
+          //  btn1->setDisabled(true);
             break;
         }
         else{
             bcanplay = true;
-            ui->pushButton->setDisabled(false);
+            //btn1->setDisabled(false);
         }
     }
 
@@ -270,7 +176,4 @@ void Base::CheckShipAmount()
 }
 
 
-void Base::on_pushButton_clicked()
-{
-    qDebug()<<"Starting Game";
-}
+

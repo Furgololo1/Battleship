@@ -39,6 +39,11 @@ if(ANDROID)
       ship.cpp
       ship.h
       base.ui
+      networkclient.cpp
+      networkclient.h
+      connectwindow.cpp
+      connectwindow.h
+      config.cpp
   )
 else()
   add_executable(Battleship
@@ -50,6 +55,11 @@ else()
     ship.cpp
     ship.h
     base.ui
+    networkclient.cpp
+    networkclient.h
+    connectwindow.cpp
+    connectwindow.h
+    config.cpp
   )
 endif()
 

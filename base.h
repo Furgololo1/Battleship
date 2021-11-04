@@ -6,10 +6,12 @@
 #include <QDebug>
 #include <QPair>
 #include <QLabel>
+#include <QWidget>
 #include <vector>
 
 
-
+#include "networkclient.h"
+#include "connectwindow.h"
 #include "button.h"
 #include "ship.h"
 
@@ -32,9 +34,8 @@ public:
 
 private slots:
 
-    void on_pushButton_2_clicked();
-
-    void on_pushButton_clicked();
+    void onPlay();
+    void onConnect();
 
 private:
     Ui::Base *ui;
@@ -62,6 +63,10 @@ private:
     std::vector<QLabel *>* labels = nullptr;
 
 
+    //play and connect button
+    QPushButton *btn1 = nullptr;
+
+
     //      vector of all buttons in game
 
     std::vector<std::vector<button *> > buttons;
@@ -80,6 +85,8 @@ private:
     void CreateUI();
 
     void CheckShipAmount();
+
+    ConnectWindow *conw = nullptr;
 
 
 
