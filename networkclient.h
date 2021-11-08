@@ -2,20 +2,38 @@
 #define NETWORKCLIENT_H
 
 #include <QTcpSocket>
+#include <QHostAddress>
 
 
-class NetworkClient
+class NetworkClient : public QObject
 {
+     Q_OBJECT
+
+
+    //server ip. localhost is basic
+    QString server_ip = "127.0.0.1";
+
+    QString nick = "Player";
+
+    QTcpSocket* _socket = nullptr;
+
+
 public:
-    NetworkClient();
+    NetworkClient(){};
+    NetworkClient(QTcpSocket* _s): _socket(_s){};
 
 
-public slots:
+    void ConnectWithServer(QString ip, QString n);
+    void SendToChat(QString);
+
+private slots:
     void onReadyRead();
 
 private:
 
-     QTcpSocket  *_socket = nullptr;
+    void CheckCommand(QString com);
+
+
 
 };
 

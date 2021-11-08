@@ -7,6 +7,8 @@
 #include <QPair>
 #include <QLabel>
 #include <QWidget>
+#include <QHostAddress>
+#include <QTcpSocket>
 #include <vector>
 
 
@@ -36,6 +38,9 @@ private slots:
 
     void onPlay();
     void onConnect();
+    //void onReadyRead();
+
+    void on_sendPB_clicked();
 
 private:
     Ui::Base *ui;
@@ -50,9 +55,11 @@ private:
 
     QString normalbutton = "QPushButton{background-color: #FFFFFF;   border: 1px; border-color: #056DE3;   border-style: solid;  color: #000000;   padding: 15px 32px;    text-align: center;   text-decoration: none;    }";
     QString normalenemybutton = "QPushButton{background-color: #FFFFFF;   border: 1px; border-color: #F44336;   border-style: solid;  color: #000000;   padding: 15px 32px;    text-align: center;   text-decoration: none;    }";
-
     QString shipsbutton = "QPushButton{background-color: #056DE3;   border: none; color: white;   padding: 15px 32px;    text-align: center;   text-decoration: none;    }";
 
+    NetworkClient *nc = nullptr;
+
+    QTcpSocket  *_socket = nullptr;
 
 //056DE3
 

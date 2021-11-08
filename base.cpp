@@ -56,8 +56,17 @@ void Base::onPlay(){
 void Base::onConnect(){
     qDebug()<<"New connection";
 
-    conw = new ConnectWindow();
+
+    QString ip = "127.0.0.1";
+    _socket = new QTcpSocket(this);
+//    _socket->connectToHost(QHostAddress(ip), 9999);
+    nc = new NetworkClient(_socket);
+   // nc->ConnectWithServer(ip, "aaa");
+
+//connect(_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+    conw = new ConnectWindow(nc);
     conw->show();
+    //connect(_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
 
 }
 
@@ -177,3 +186,15 @@ void Base::CheckShipAmount()
 
 
 
+void Base::on_sendPB_clicked()
+{
+    //ui->textchat->text
+if(_socket)
+    nc->SendToChat(ui->textchat->text());
+
+if(ui->textchat->text() != "")
+    ui->chat->append(ui->textchat->text());
+
+    ui->textchat->clear();
+
+}
