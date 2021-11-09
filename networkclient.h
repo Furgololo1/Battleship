@@ -3,6 +3,7 @@
 
 #include <QTcpSocket>
 #include <QHostAddress>
+#include <QTextEdit>
 
 
 class NetworkClient : public QObject
@@ -17,10 +18,12 @@ class NetworkClient : public QObject
 
     QTcpSocket* _socket = nullptr;
 
+    QTextEdit* chat = nullptr;
+
 
 public:
     NetworkClient(){};
-    NetworkClient(QTcpSocket* _s): _socket(_s){};
+    NetworkClient(QTcpSocket* _s, QTextEdit *c): _socket(_s){}, chat(c);
 
 
     void ConnectWithServer(QString ip, QString n);

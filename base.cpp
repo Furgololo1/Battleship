@@ -56,17 +56,11 @@ void Base::onPlay(){
 void Base::onConnect(){
     qDebug()<<"New connection";
 
-
-    QString ip = "127.0.0.1";
     _socket = new QTcpSocket(this);
-//    _socket->connectToHost(QHostAddress(ip), 9999);
-    nc = new NetworkClient(_socket);
-   // nc->ConnectWithServer(ip, "aaa");
+    nc = new NetworkClient(_socket, ui->chat);
 
-//connect(_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
     conw = new ConnectWindow(nc);
     conw->show();
-    //connect(_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
 
 }
 

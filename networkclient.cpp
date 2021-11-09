@@ -38,5 +38,8 @@ void NetworkClient::CheckCommand(QString com)
     if(com.contains("?nick?", Qt::CaseSensitive))
         _socket->write(QByteArray::fromStdString("?nick? " + nick.toStdString()));
 
+    else if(com.contains("!chat!", Qt::CaseSensitive))
+        chat->append(com.remove("!chat!", Qt::CaseSensitive));
+
 
 }
