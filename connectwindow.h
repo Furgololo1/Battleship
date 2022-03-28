@@ -6,25 +6,29 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QListView>
+#include <thread>
+#include <chrono>
+
 
 #include "networkclient.h"
+
 
 class ConnectWindow : public QWidget
 {
     Q_OBJECT
 private:
-    //pointer to network client
+
+ //pointer to network client
     NetworkClient* nc = nullptr;
-    //text edit to iput server ip
+ //text edit to input server ip
     QLineEdit* teip = nullptr;
-    //text edit for typing player nick
+ //text edit for typing player nick
     QLineEdit* tenick = nullptr;
-    //button to aprove typed ip from server and send it to nc
-    QPushButton* btnok = nullptr;
-    //vector of labels
+ //button to aprove typed ip from server and send it to nc
+    QPushButton* btnconn = nullptr;
+ //vector of labels
     std::vector<QLabel*> *labels = nullptr;
-    //list of players conneced to server
-    QListView* pl = nullptr;
+
 
 public:
    // explicit ConnectWindow(QWidget *parent = nullptr);
@@ -33,19 +37,32 @@ public:
         this->setWindowTitle("Connect with server");
         CreateGUI();
     }
+    ~ConnectWindow(){
+        delete labels;
+    }
+
+    void ConnectedSuccesfull();
 
 
 private slots:
 
-    void onOKbtn();
+    void onConnbtn();
 
 private:
 
     void CreateGUI();
 
 
+template <typename T>
+    void Spawn(T object,  int x, int y, int sizex, int sizey){
+        object->move(x,y);
+        object->setFixedSize(sizex, sizey);
+        object->setFont(QFont("Arial", 10));
+        object->setAlignment(Qt::AlignmentFlag::AlignHCenter);
+    }
 
 
 };
+
 
 #endif // CONNECTWINDOW_H

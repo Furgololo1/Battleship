@@ -24,41 +24,47 @@ class ship
 
 public:
 
-    ship();
-    ship(std::vector<std::vector<button *> > &tempbuttons): buttons(&tempbuttons){};
-    ship(std::vector<std::vector<button *> > &tempbuttons, int i): buttons(&tempbuttons), index(i){};
+    ship(){};
+    ship(std::vector<std::vector<Button *> > &tempButtons): buttons(&tempButtons){};
+    ship(std::vector<std::vector<Button *> > &tempButtons, int i): buttons(&tempButtons), index(i){};
 
-    ~ship(){delete buttons; shipvec.clear();}
+    ~ship(){shipvec.clear(); /*buttons->clear();*/}
 
     int GetIndex(){return index;}
 
-    QPair<bool,bool> TryAddButtonToShip(button *b);
+    QPair<bool,bool> TryAddButtonToShip(Button *b);
 
     bool AdditionValidation();
 
     int GetShipsize(){return shipsinfleet;}
 
-    std::vector<button *> *GetShipvec(){return &shipvec;}
+    int GetShipSize2(){return shipvec.size();}
 
-    bool RemoveFromShip(button *b);
+    std::vector<Button *> *GetShipvec(){return &shipvec;}
+
+    bool RemoveFromShip(Button *b);
+    bool RemoveFromShip(QString &ship);
+    void DestroyShip();
 
     void Merge(ship* s);
+
+    void Destroy();
 
 
 private:
 
     //ship components
-    std::vector<button *> shipvec;
+    std::vector<Button *> shipvec;
 
     //temporary buttons for disconnecting
-    std::vector<std::vector<button *> > *buttons = nullptr;
+    std::vector<std::vector<Button *> > *buttons = nullptr;
 
 
     void sortRow();
     void sortCol();
 
-    void DisableButton(button *b);
-    void EnableButtons(button *b);
+    void DisableButton(Button *b);
+    void EnableButtons(Button *b);
 
 
 };
