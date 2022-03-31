@@ -43,7 +43,7 @@ if(ANDROID)
       networkclient.h
       connectwindow.cpp
       connectwindow.h
-      config.cpp
+      base_slots.cpp
       types.cpp
   )
 else()
@@ -60,7 +60,7 @@ else()
     networkclient.h
     connectwindow.cpp
     connectwindow.h
-    config.cpp
+    base_slots.cpp
     types.cpp
   )
 endif()

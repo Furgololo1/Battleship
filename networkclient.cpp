@@ -31,7 +31,7 @@ void NetworkClient::AcceptInvite()
 void NetworkClient::DiscardInvite()
 {
     socket->write("!invitenot!" + QByteArray::fromStdString(enemynick.toStdString()) + "^");
-    uimem->stack->setCurrentIndex(1);
+//    uimem->stack->setCurrentIndex(1);
 }
 
 void NetworkClient::Shoot(QString shot, Button* button)     //shoot
@@ -51,13 +51,11 @@ void NetworkClient::InterpretCommand(QString com)
             uimem->playerlist->addItem(com.remove("!players!", Qt::CaseSensitive));
 
         else if(com.contains("?invite?", Qt::CaseSensitive)){           //notify that player is invite to game
-            uimem->stack->setCurrentIndex(0);
             enemynick = com.remove("?invite?", Qt::CaseSensitive);
             uimem->wtp_lbl->setText(enemynick + "\nwants to play with you");
         }
 
         else if(com.contains("!invitenot!", Qt::CaseSensitive)){        //infor that invite is rejected
-            uimem->stack->setCurrentIndex(1);
         }
 
         else if(com.contains("!inviteok!", Qt::CaseSensitive)){         //inform that invite is accept and starts game
@@ -103,8 +101,6 @@ void NetworkClient::InterpretCommand(QString com)
             bEnd = true;
             uimem->info_lbl->setText("You won!!!");
             EndGame();
-
-            emit onNotUrTurn();
         }
 
 
@@ -112,8 +108,6 @@ void NetworkClient::InterpretCommand(QString com)
             bEnd = true;
             uimem->info_lbl->setText(enemynick + " won!!!");
             EndGame();
-
-            emit onNotUrTurn();
         }
 
         //socket->reset();

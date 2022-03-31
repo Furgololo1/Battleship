@@ -7,38 +7,43 @@ Base::Base(QWidget *parent)
 {
     ui->setupUi(this);
 
-    this->resize(910,302);
+    this->resize(660,300);
 
-//    ships = new std::vector<ship *>();
+    ui->stackedWidget->setCurrentIndex(1);
 
+    ui->accept_btn->setHidden(true);
+    ui->discard_btn->setHidden(true);
 
-    CreateButtons();
-    CreateEnemyButtons();
-    CreateUI();
 }
 
-Base::~Base()
-{
-    if(conw)
-        delete conw;
-    if(uimem)
-        delete uimem;
-    if(nc)
-        delete nc;
+void Base::ResetGame(){
 
-    _socket->close();
+    for(auto &s : ships){
+        delete s;
+    }
 
-    if(_socket)
-        delete _socket;
+    ships.erase(ships.begin(), ships.end());
+    ships.clear();
 
-    if(btn1)
-        delete btn1;
+    ResetButtons(&buttons);
+    ResetButtons(&enemybuttons);
 
-    for(auto &i : ships)
-        delete i;
+    delete info_lbl;
+    delete btn1;
+
+    ui->wtp_lbl->setText("No pending \ninvitations...");
+
+    bcanplay = false;
+    ui->stackedWidget->setCurrentIndex(1);
+}
 
 
-    delete ui;
+void Base::ResetButtons(std::vector<std::vector<Button *>> *vec){
+    for(auto &i : *vec)
+        for(auto &j : i){
+            j->disconnect();
+            j->Reset();
+        }
 }
 
 
@@ -156,17 +161,201 @@ void Base::CheckShipAmount()
 }
 
 
+void Base::RemoveShip(QString shiptoremove)
+{
+    for(const auto &s: ships)
+        if(s->RemoveFromShip(shiptoremove)) break;
+}
+
+
+void Base::SendShips()
+{
+    QString fleet = "";
+
+    for(const auto &f : ships){    // f means 1 fleet (vector of Buttons from class ship)
+        for(const auto &s : *f->GetShipvec()){
+            fleet += s->GetName();
+        }
+        nc->SendToServer("!ships!" + fleet);
+        fleet.clear();
+    }
+}
+
+
+void Base::ConnectedSuccesfull()
+{
+    delete ui->ip_le;
+    delete ui->name_le;
+    delete ui->connect_btn;
+    delete ui->connect_lbl;
+    ui->accept_btn->setHidden(false);
+    ui->discard_btn->setHidden(false);
+}
+
+
+void Base::CreateConnection(Button *b)
+{
+
+  b->connect(b, &Button::clicked, this, [b, this]()mutable{
+
+     qDebug()<<"Clicked button";
+
+     if(!b->bisclicked)
+         AssignButtonToShip(b);
+     else
+         RemoveButtonFromShip(b);
+     });
+
+}
+
+
+void Base::CreateEnemyConnection(Button *b)
+{
+    b->connect(b, &Button::clicked, this, [b, this]()mutable{
+        nc->Shoot(b->GetName(), b);
+        b->setDisabled(true);
+        qDebug()<<"Shoot in button with name "<<b->GetName();
+    });
+}
+
+
+void Base::CreateLabelsForShipsValidation()
+{
+    QString labelstyle = "QLabel{ background-color:#FF004B; color: rgb(0,0,0); font-family: 'Arial Black'; font-size: 18px; }";
+
+    int x = 270, y = 120;
+    int sizex = 120, sizey = 30;
+
+    for(int i = 0; i < 4; i++){
+        labels.emplace_back(new QLabel("0/"+QString::number(i+1), ui->stackedWidget->currentWidget()));
+        labels[i]->move(x,y);
+        labels[i]->setFixedSize(sizex,sizey);
+        labels[i]->setStyleSheet(labelstyle);
+        labels[i]->setAlignment(Qt::Alignment::enum_type::AlignHCenter);
+        labels[i]->setHidden(false);
+        x += 10;
+        y += 40;
+        sizex -= 20;
+    }
+
+}
+
+
+void Base::CreateUI(){
+  CreateEnemyButtons();
+  CreateButtons();
+  bUIExists = true;
+}
+
+void Base::CreateEnemyButtons(){
+
+    enemybuttons.push_back(std::vector<Button *>());
+
+    int x = 400;
+    int y = 45;
+
+    int number = 0;
+    char letter = 'A';
+
+    Button* newBtn;
+
+    for(int i = 0; i < 10; i++){
+        enemybuttons.emplace_back(std::vector<Button *>());
+
+        for(int j = 0; j < 10; j++){
+            newBtn = new Button();
+            newBtn->setParent(ui->stackedWidget->currentWidget());
+            newBtn->resize(buttonsize, buttonsize);
+            newBtn->move(x,y);
+            newBtn->setStyleSheet(normalenemybutton);
+            newBtn->SetName(static_cast<QChar>(letter), number);
+            newBtn->setDisabled(true);
+            newBtn->setHidden(false);
+            CreateEnemyConnection(newBtn);
+            enemybuttons[i].push_back(newBtn);
+            x+=25;
+            letter++;
+        }
+        letter = 'A';
+        number++;
+        x = 400;
+        y += 25;
+    }
+}
+
+
+void Base::CreateButtons(){
+
+    buttons.push_back(std::vector<Button *>());
+
+    int x = 10;
+    int y = 45;
+
+    int number = 0;
+    char letter = 'A';
+    Button* newBtn;
+
+    for(int i = 0; i < 10; i++){
+        buttons.push_back(std::vector<Button *>());
+
+        for(int j = 0; j < 10; j++){
+            newBtn = new Button();
+            newBtn->setParent(ui->stackedWidget->currentWidget());
+            newBtn->resize(buttonsize, buttonsize);
+            newBtn->move(x,y);
+            newBtn->setStyleSheet(normalbutton);
+            newBtn->SetName(static_cast<QChar>(letter), number);
+            newBtn->setDisabled(true);
+            newBtn->setHidden(false);
+            CreateConnection(newBtn);
+            buttons[i].push_back(newBtn);
+
+            x+=25;
+            letter++;
+        }
+        letter = 'A';
+        number++;
+        x = 10;
+        y += 25;
+    }
+
+}
+
+
+Base::~Base()
+{
+
+    if(uimem)
+        delete uimem;
+    if(nc)
+        delete nc;
+
+    if(_socket){
+        _socket->close();
+        delete _socket;
+    }
+
+    if(btn1)
+        delete btn1;
+
+    for(auto &i : ships)
+        delete i;
+
+    delete ui;
+}
+
+
+
+
 void Base::EnablePlayerButtons()
 {
  //player buttons
-
     for(int i = 0; i < 10; i++){
        // Buttons.push_back(std::vector<Buttons *>());
         for(int j = 0; j < 10; j++){
             buttons[i][j]->setDisabled(false);
         }
     }
-
 }
 
 
@@ -185,9 +374,7 @@ void Base::DisablePlayerButtons()
 
 void Base::DisableEnemyButtons()
 {
-
  //enemy buttons, disabled when not owner player turn
-
     for(int i = 0; i < 10; i++){
        // Buttons.push_back(std::vector<Button *>());
         for(int j = 0; j < 10; j++){
@@ -200,7 +387,6 @@ void Base::DisableEnemyButtons()
 void Base::EnableEnemyButtons()
 {
     //enemy buttons
-
        for(int i = 0; i < 10; i++){
           // Buttons.push_back(std::vector<Button *>());
            for(int j = 0; j < 10; j++){
@@ -210,264 +396,4 @@ void Base::EnableEnemyButtons()
 }
 
 
-void Base::RemoveShip(QString shiptoremove)
-{
-    for(const auto &s: ships)
-        if(s->RemoveFromShip(shiptoremove)) break;
-}
-
-
-void Base::SendShips()
-{
-
-    QString fleet = "";
-
-    for(const auto &f : ships){    // f means 1 fleet (vector of Buttons from class ship)
-        for(const auto &s : *f->GetShipvec()){
-            fleet += s->GetName();
-        }
-        nc->SendToServer("!ships!" + fleet);
-        fleet.clear();
-    }
-
-}
-
-
-//######################        SLOTS       #######################
-
-
-void Base::on_DestroyAllShip(QString allship)
-{
-
-    QString firstship = allship.left(2);
-
-    for(const auto &s : ships)
-        for(const auto &shipvec : *s->GetShipvec())
-            if(shipvec->GetName() == firstship){
-                s->DestroyShip();
-                break;
-            }
-
-}
-
-
-void Base::on_DestroyAllEnemyShip(QString allships)
-{
-    QString destroyedButton = "QPushButton{background-color: #F44336;   border: 1px; border-color: #F44336;   border-style: solid;   color: #000000;   padding: 15px 32px;    text-align: center;   text-decoration: none;    }";
-    QString oneship = allships.left(2);
-    int size = (allships.length()/2);
-
-    for (int i = 0; i < size; i++) {
-        for(int row = 0; row < 10; row++){
-            for(int col = 0; col < 10; col++){
-                if(enemybuttons[row][col]->GetName() == oneship){
-                    enemybuttons[row][col]->setStyleSheet(destroyedButton);
-                    enemybuttons[row][col]->setDisabled(true);
-                    enemybuttons[row][col]->bIsDestroyed = true;
-                    allships.remove(oneship, Qt::CaseInsensitive);
-                    oneship = allships.left(2);
-                }
-            }
-        }
-    }
-
-}
-
-
-void Base::on_EndGame()
-{
-    uimem->btn1->setHidden(false);
-    uimem->btn1->setText("New Game");
-    connect(btn1, &QPushButton::clicked, this, &Base::on_ResetGame);
-}
-
-
-void Base::on_ResetGame()
-{
-    btn1->disconnect();
-
-    if(!ships.empty()){
-
-        DisableEnemyButtons();
-        DisablePlayerButtons();
-
-        nc->SendToServer("!endgame!");
-
-        for(auto &s : ships){
-            delete s;
-        }
-
-        ships.erase(ships.begin(), ships.end());
-        ships.clear();
-
-
-        for(const auto &i : buttons)
-            for(const auto &i2 : i)
-                i2->Reset();
-
-        for(const auto &i : enemybuttons)
-           for(const auto &i2 : i)
-               i2->Reset();
-
-
-        ui->stack->setCurrentIndex(2);
-
-        delete uimem->info_lbl;
-        btn1->setHidden(true);
-
-        CreateLabelsForShipsValidation();
-
-    }
-
-}
-
-
-void Base::onConnectedToServer()
-{
-    delete conw;
-    //btn1->setText("Play");
-    qDebug()<<"Connected to the server";
-
-    btn1->setHidden(true);
-    disconnect(btn1, &QPushButton::clicked, this, &Base::onConnect);
-
-    if(ui->stack->currentIndex() == 1)
-        ui->stack->setCurrentIndex(2);
-    else
-        ui->stack->setCurrentIndex(1);
-}
-
-
-void Base::onDisconnectedFromServer()
-{
-    qDebug()<<"Cannot connect to the server";
-}
-
-
-void Base::on_choosepl_btn_clicked()
-{
-    if(ui->stack->currentIndex() == 1)
-        ui->stack->setCurrentIndex(2);
-    else
-        ui->stack->setCurrentIndex(1);
-}
-
-
-void Base::on_pushbutton_clicked()
-{
-    //nc->SendToServer(ui->players->currentItem());
-}
-
-
-void Base::on_accept_btn_clicked()
-{
-    nc->AcceptInvite();
-}
-
-
-void Base::on_discard_btn_clicked()
-{
-    nc->DiscardInvite();
-}
-
-
-void Base::on_sendinvite_btn_clicked()
-{
-    nc->SendToServer("!invite?!" + ui->players->currentItem()->text());
-}
-
-
-void Base::on_pushButton_clicked()
-{
-//    if(ships){
-        for(const auto &f : ships)
-            for(const auto &s : *f->GetShipvec())
-                qDebug()<<s->GetName();
-//    }
-
-         qDebug()<<"ship size"<<ships.size();
-
-}
-
-
-void Base::onStartGame()
-{
-    connect(btn1, &QPushButton::clicked, this, &Base::onPlay);
-    EnablePlayerButtons();
-
-        uimem->stack->setCurrentIndex(1);
-        uimem->choosepl_btn->hide();
-        uimem->btn1->setHidden(false);
-        uimem->btn1->setDisabled(true);
-        uimem->btn1->setText("Play");
-
-}
-
-
-void Base::onPlay(){
-
-    for(auto &l : labels)
-        delete l;
-
-    labels.erase(labels.begin(), labels.end());
-
-    SendShips();
-    nc->SendToServer("!ready!");
-    btn1->setHidden(true);
-    btn1->disconnect();
-
-    DisablePlayerButtons();
-    DisableEnemyButtons();
-
-    QString labelstyle = "QLabel{ border: 3px solid #FF004B; color: rgb(0,0,0); font-family: 'Arial Black'; font-size: 12px; }";
-
-    uimem->info_lbl = new QLabel("Wait for\nenemy player", this);
-   // uimem->info_lbl->setHidden(false);
-    uimem->info_lbl->show();
-    uimem->info_lbl->move(270,30);
-    uimem->info_lbl->setFixedSize(120, 50);
-    uimem->info_lbl->setStyleSheet(labelstyle);
-    uimem->info_lbl->setFont(QFont("Arial", 14));
-    uimem->info_lbl->setAlignment(Qt::AlignmentFlag::AlignHCenter | Qt::AlignmentFlag::AlignVCenter);
-
-}
-
-void Base::onConnect(){
-
-    uimem->playerlist = ui->players;
-    uimem->stack = ui->stack;
-    uimem->wtp_lbl = ui->wtp_lbl;
-    uimem->choosepl_btn = ui->choosepl_btn;
-    uimem->enemy_lbl = ui->enemy_lbl;
-    uimem->you_lbl = ui->you_lbl;
-    uimem->btn1 = btn1;
-
-
-    _socket = new QTcpSocket(this);
-    nc = new NetworkClient(_socket, uimem);
-
-    conw = new ConnectWindow(nc);
-    conw->show();
-
-    connect(_socket, &QAbstractSocket::connected, this, &Base::onConnectedToServer);
-    connect(nc, &NetworkClient::onUrTurn, this, &Base::EnableEnemyButtons);
-    connect(nc, &NetworkClient::onNotUrTurn, this, &Base::DisableEnemyButtons);
-    connect(nc, &NetworkClient::onRemoveShip, this, &Base::RemoveShip);
-    connect(nc, &NetworkClient::DestroyShip, this, &Base::on_DestroyAllShip);
-    connect(nc, &NetworkClient::DestroyEnemyShip, this, &Base::on_DestroyAllEnemyShip);
-    connect(nc, &NetworkClient::Reset, this ,&Base::on_EndGame);
-    connect(nc, &NetworkClient::StartGame, this, &Base::onStartGame);
-
-}
-
-
-void Base::onChoosePlayer()
-{
-
-    if(ui->stack->currentIndex() == 1)
-        ui->stack->setCurrentIndex(2);
-    else
-        ui->stack->setCurrentIndex(1);
-
-}
 

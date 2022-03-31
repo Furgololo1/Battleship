@@ -15,7 +15,6 @@ class NetworkClient : public QObject
 {
      Q_OBJECT
 
-
     //server ip. localhost is basic
     QString server_ip = "127.0.0.1";
 
@@ -80,7 +79,7 @@ void NetworkClient::ConnectWithServer(QString ip, QString n, Function func)
      socket->connectToHost(QHostAddress(server_ip), 9999);
      //_socket->write(QByteArray::fromStdString("?nick? "+nick.toStdString()));
 
-     if(socket->state() == QAbstractSocket::ConnectingState){
+     if(socket->state() == QAbstractSocket::ConnectingState){ // bylo ConnectingState
          connect(socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
          func();
      }
